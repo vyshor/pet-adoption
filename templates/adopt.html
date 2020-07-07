@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <title>Pet Adoption</title>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='adopt.css') }}">
+</head>
+<body>
+
+    <h1>Your new buddy is one click away!</h1>
+    <div class='container' id='pet-container'>
+        <img src="{{ url_for('static', filename='dog.jpeg') }}" style="height:50%;">
+        <p> Name    : Buster </p>
+        <p> Species : Dog </p>
+        <p> Breed   : French Bulldog </p>
+        <p> Age     : 3 years </p>
+        <p> Sex     : Male </p>
+    </div>
+    <div class='container' id='form-container'>
+        <h4> Do you want to adopt Buster? </h4>
+        <p> Contact the owner: </p>
+        <form action="" method="POST">
+            {{ form.hidden_tag() }}
+            <div>
+                {{ form.name.label }}
+                {% if form.name.errors %}
+                    {{ form.name(placeholder="Name") }}
+                    <div>
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(placeholder="Name") }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.email.label }}
+                {% if form.email.errors %}
+                    {{ form.email(placeholder="Email") }}
+                    <div>
+                        {% for error in form.email.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(placeholder="Email") }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.message.label }}
+                {% if form.message.errors %}
+                    {{ form.message(placeholder="Write a message...") }}
+                    <div>
+                        {% for error in form.message.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.message(placeholder="Write a message...") }}
+                {% endif %}
+            </div>
+            <div>
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+</body>
+</html>
