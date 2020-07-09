@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Training Application Form</title>
+    <link rel="stylesheet" href="../static/style1.css">
+  </head>
+  <body>
+    <div class="testbox">
+      <form action="/">
+        <div class="banner">
+          <h1>Create a listing</h1>
+        </div>
+        <h2>Pet's Details</h2>
+        <div class="item">
+          <p>Name</p>
+          <div class="name-item">
+            <input type="text" name="name" placeholder="Pet's name"/>
+          </div>
+        </div>
+        <div class="item">
+            <select>
+              <option value="">Animal type</option>
+              <option value="1">Cats</option>
+              <option value="2">Dogs</option>
+              <option value="3">Other Pets</option>
+            </select>
+          </div>
+            <h2>Tell us more!</h2>
+            <div class="textarea">
+                <textarea rows="10" cols="100">
+                </textarea>
+            </div>
+          <input type="file" id="petphoto" name="filename">
+          <input type="submit" value="Submit">
+      </form>
+    </div>
+  </body>
+</html>
