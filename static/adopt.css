@@ -12,3 +12,8 @@
 #form-container{
     text-align: left;
 }
+
+body {
+  font-family: sans-serif;
+  background-color: #eeeeee;
+}

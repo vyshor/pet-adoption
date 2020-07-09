@@ -1,12 +1,14 @@
 body {
   font-family: "helvetica", sans-serif;
-  text-align: center;
+  text-align: right;
+  background-color:#C2F9BB;
+
 }
 
 img {
   border: 5px solid #555;
-  width:  600px;
-  height: 400px;
+  width: auto;
+  height: auto;
   object-fit: cover;
   float: left;
   clear: left;
