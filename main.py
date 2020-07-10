@@ -26,14 +26,7 @@ app.config['SECRET_KEY'] = os.urandom(32)
 
 @app.route('/')
 def root():
-    # For the sake of example, use static information to inflate the template.
-    # This will be replaced with real information in later steps.
-    dummy_times = [datetime.datetime(2018, 1, 1, 10, 0, 0),
-                   datetime.datetime(2018, 1, 2, 10, 30, 0),
-                   datetime.datetime(2018, 1, 3, 11, 0, 0),
-                   ]
-
-    return render_template('index.html', times=dummy_times)
+    return render_template('main.html')
 
 
 @app.route('/adopt', methods=['GET', 'POST'])
@@ -55,6 +48,5 @@ if __name__ == '__main__':
     # the "static" directory. See:
     # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
     # App Engine itself will serve those files as configured in app.yaml.
-    print(create_user())
     app.run(host='127.0.0.1', port=8080, debug=True)
 # [START gae_python38_render_template]

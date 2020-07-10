@@ -13,15 +13,15 @@ http://www.templatemo.com/tm-500-fluid-gallery
     <!-- load stylesheets -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">  
     <!-- Google web font "Open Sans" -->
-    <link rel="stylesheet" href="Font-Awesome-4.7/css/font-awesome.min.css">                
+    <link rel="stylesheet" href="{{ url_for('static', filename='Font-Awesome-4.7/css/font-awesome.min.css') }}">                
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">                                      
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">                                      
     <!-- Bootstrap style -->
-    <link rel="stylesheet" href="css/hero-slider-style.css">                              
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hero-slider-style.css') }}">                              
     <!-- Hero slider style (https://codyhouse.co/gem/hero-slider/) -->
-    <link rel="stylesheet" href="css/magnific-popup.css">                                 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">                                 
     <!-- Magnific popup style (http://dimsemenov.com/plugins/magnific-popup/) -->
-    <link rel="stylesheet" href="css/templatemo-style.css">                                   
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">                                   
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,7 +32,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 
         <!-- These two JS are loaded at the top for gray scale including the loader. -->
 
-        <script src="js/jquery-1.11.3.min.js"></script>
+        <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
         <!-- jQuery (https://jquery.com/download/) -->
 
         <script>
@@ -98,41 +98,41 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <!-- Gallery One pop up connected with JS code below -->
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/polite_cat.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/polite_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Polite Cat</h2>
                                                 <p class="tm-figure-description">This is a polite cat.</p>
-                                                <a href="../images/polite_cat.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/polite_cat.jpg') }}">View more</a>
                                             </figcaption>           
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/crying_cat.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/crying_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Crying Cat</h2>
                                                 <p class="tm-figure-description">This is a crying cat.</p>
-                                                <a href="../images/crying_cat.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/crying_cat.jpg') }}">View more</a>
                                             </figcaption>
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/swag_cat.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/swag_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Swag Cat</h2>
                                                 <p class="tm-figure-description">This cat got swag.</p>
-                                                <a href="../images/swag_cat.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/swag_cat.jpg') }}">View more</a>
                                             </figcaption>           
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/yelled_at_cat.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/yelled_at_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Yelled at cat</h2>
                                                 <p class="tm-figure-description">This cat is innocent.</p>
-                                                <a href="../images/yelled_at_cat.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/yelled_at_cat.jpg') }}">View more</a>
                                             </figcaption>
                                         </figure>
                                     </div>
@@ -152,41 +152,41 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                     
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/no_idea_dog.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/no_idea_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">No idea dog</h2>
                                                 <p class="tm-figure-description">This dog needs help.</p>
-                                                <a href="../images/no_idea_dog.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/no_idea_dog.jpg') }}">View more</a>
                                             </figcaption>           
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/doge.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/doge.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Doge</h2>
                                                 <p class="tm-figure-description">Doge meme dog</p>
-                                                <a href="../images/doge.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/doge.jpg') }}">View more</a>
                                             </figcaption>           
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/pun_dog.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/pun_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Pun dog</h2>
                                                 <p class="tm-figure-description">This dog got all the puns.</p>
-                                                <a href="../images/pun_dog.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/pun_dog.jpg') }}">View more</a>
                                             </figcaption>           
                                         </figure>
                                     </div>
                                     <div class="grid-item">
                                         <figure class="effect-sadie">
-                                            <img src="../images/computer_dog.jpg" alt="Image" class="img-fluid tm-img">
+                                            <img src="{{ url_for('static', filename='images/computer_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
                                             <figcaption>
                                                 <h2 class="tm-figure-title">Computer dog</h2>
                                                 <p class="tm-figure-description">A dog using the computer.</p>
-                                                <a href="../images/computer_dog.jpg">View more</a>
+                                                <a href="{{ url_for('static', filename='images/computer_dog.jpg') }}">View more</a>
                                             </figcaption>
                                         </figure>
                                     </div>
@@ -351,10 +351,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
         
         <!-- load JS files -->
         
-        <script src="js/tether.min.js"></script> <!-- Tether (http://tether.io/)  --> 
-        <script src="js/bootstrap.min.js"></script>             <!-- Bootstrap js (v4-alpha.getbootstrap.com/) -->
-        <script src="js/hero-slider-main.js"></script>          <!-- Hero slider (https://codyhouse.co/gem/hero-slider/) -->
-        <script src="js/jquery.magnific-popup.min.js"></script> <!-- Magnific popup (http://dimsemenov.com/plugins/magnific-popup/) -->
+        <script src="{{ url_for('static', filename='js/tether.min.js') }}"></script> <!-- Tether (http://tether.io/)  --> 
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>             <!-- Bootstrap js (v4-alpha.getbootstrap.com/) -->
+        <script src="{{ url_for('static', filename='js/hero-slider-main.js') }}"></script>          <!-- Hero slider (https://codyhouse.co/gem/hero-slider/) -->
+        <script src="{{ url_for('static', filename='js/jquery.magnific-popup.min.js') }}"></script> <!-- Magnific popup (http://dimsemenov.com/plugins/magnific-popup/) -->
         
         <script>
 
