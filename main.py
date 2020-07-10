@@ -16,8 +16,9 @@
 import datetime
 import os
 
-from forms import AdoptionForm
 from flask import Flask, render_template, redirect, url_for
+from db_operations import *
+from forms import AdoptionForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -54,5 +55,6 @@ if __name__ == '__main__':
     # the "static" directory. See:
     # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
     # App Engine itself will serve those files as configured in app.yaml.
+    print(create_user())
     app.run(host='127.0.0.1', port=8080, debug=True)
 # [START gae_python38_render_template]

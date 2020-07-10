@@ -43,6 +43,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# Jetbrains
+.idea
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -139,5 +142,8 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+
+# Firebase service key
+servicekey.json
 
 # End of https://www.toptal.com/developers/gitignore/api/flask
