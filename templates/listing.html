@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Training Application Form</title>
+    <title>Pet Listing Form</title>
     <link rel="stylesheet" href="../static/style1.css">
   </head>
   <body>
     <div class="testbox">
-      <form action="/">
+      <form action="" method="POST">
+        {{ form.hidden_tag() }}
         <div class="banner">
           <h1>Create a listing</h1>
         </div>
         <h2>Pet's Details</h2>
         <div class="item">
           <p>Name</p>
-          <div class="name-item">
-            <input type="text" name="name" placeholder="Pet's name"/>
-          </div>
+          <div>
+                {{ form.name.label }}
+                {% if form.name.errors %}
+                    {{ form.name(placeholder="Name") }}
+                    <div>
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(placeholder="Name") }}
+                {% endif %}
+            </div>
         </div>
         <div class="item">
             <select>
@@ -31,7 +42,9 @@
                 </textarea>
             </div>
           <input type="file" id="petphoto" name="filename">
-          <input type="submit" value="Submit">
+          <div>
+                {{ form.submit }}
+            </div>
       </form>
     </div>
   </body>
