@@ -14,11 +14,14 @@
 
 # [START gae_python38_render_template]
 import datetime
+import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from db_operations import *
+from forms import AdoptionForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(32)
 
 
 @app.route('/')
@@ -31,6 +34,17 @@ def root():
                    ]
 
     return render_template('index.html', times=dummy_times)
+
+
+@app.route('/adopt', methods=['GET', 'POST'])
+def adopt(pet=None):
+    # Pet set to none for testing the route
+    # Pet object expected to be passed when redirected from browsing
+    form = AdoptionForm()
+    if form.validate_on_submit():
+        #TODO send message with data from form
+        return redirect(url_for('root'))
+    return render_template('adopt.html', pet=pet, form=form)
 
 
 if __name__ == '__main__':

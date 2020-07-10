@@ -1,2 +1,5 @@
 Flask==1.1.2
 firebase_admin
+Flask-WTF==0.14.2
+Werkzeug==0.15.6
+WTForms==2.2.1

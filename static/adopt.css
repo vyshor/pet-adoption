@@ -1,0 +1,14 @@
+.container{
+    margin-top: 5vw;
+    float: left;
+}
+
+#pet-container{
+    width: 30vw;
+    height: 70vh;
+    margin-left: 20vw;
+}
+
+#form-container{
+    text-align: left;
+}
