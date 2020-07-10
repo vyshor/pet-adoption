@@ -40,8 +40,7 @@ background: #fff;
 }
 .banner {
 position: relative;
-height: 600px;
-        background-image: url("../images/computer_dog.jpg");
+height: 200px;
         background-size: cover;
 display: flex;
          justify-content: center;
