@@ -16,8 +16,9 @@
 import datetime
 import os
 
-from forms import AdoptionForm
 from flask import Flask, render_template, redirect, url_for
+from db_operations import *
+from forms import AdoptionForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -25,14 +26,7 @@ app.config['SECRET_KEY'] = os.urandom(32)
 
 @app.route('/')
 def root():
-    # For the sake of example, use static information to inflate the template.
-    # This will be replaced with real information in later steps.
-    dummy_times = [datetime.datetime(2018, 1, 1, 10, 0, 0),
-                   datetime.datetime(2018, 1, 2, 10, 30, 0),
-                   datetime.datetime(2018, 1, 3, 11, 0, 0),
-                   ]
-
-    return render_template('index.html', times=dummy_times)
+    return render_template('main.html')
 
 
 @app.route('/adopt', methods=['GET', 'POST'])
