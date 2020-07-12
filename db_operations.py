@@ -71,3 +71,4 @@ def get_listings():
     listings = listings_db.stream()
 
     return [l.to_dict() for l in listings]
+    
