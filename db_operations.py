@@ -70,7 +70,7 @@ def delete_user(user_email):
 
 def create_listing(listing):
     try:
-        res = users_db.document(listing.listing_id).set(listing.to_firestore())
+        res = listings_db.document(listing.listing_id).set(listing.to_firestore())
         log.info(res.update_time)
         return True
     except Exception as e:
@@ -96,7 +96,7 @@ def get_listings():
 
 def update_listing(listing_id, listing_details):
     try:
-        users_db.document(listing_id).update(listing_details)
+        listings_db.document(listing_id).update(listing_details)
         return True
     except Exception as e:
         print(f"An Error Occured: {e}")
@@ -104,7 +104,7 @@ def update_listing(listing_id, listing_details):
 
 def delete_listing(listing_id):
     try:
-        users_db.document(listing_id).delete()
+        listings_db.document(listing_id).delete()
         return True
     except Exception as e:
         log.error(e)
