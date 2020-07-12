@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pet Listing Form</title>
+    <link rel="stylesheet" href="../static/style1.css">
+  </head>
+  <body>
+    <div class="testbox">
+      <form action="" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="banner">
+          <h1>Create a listing</h1>
+        </div>
+        <h2>Pet's Details</h2>
+        <div class="item">
+          <p>Name</p>
+          <div>
+                {{ form.name.label }}
+                {% if form.name.errors %}
+                    {{ form.name(placeholder="Name") }}
+                    <div>
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.name(placeholder="Name") }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="item">
+            <select>
+              <option value="">Animal type</option>
+              <option value="1">Cats</option>
+              <option value="2">Dogs</option>
+              <option value="3">Other Pets</option>
+            </select>
+          </div>
+            <h2>Tell us more!</h2>
+            <div class="textarea">
+                <textarea rows="10" cols="100">
+                </textarea>
+            </div>
+          <input type="file" id="petphoto" name="filename">
+          <div>
+                {{ form.submit }}
+            </div>
+      </form>
+    </div>
+  </body>
+</html>
