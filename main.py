@@ -41,9 +41,12 @@ def adopt(listing_id):
         adopter_name = form.name.data
         adopter_email = form.email.data
         email_message = form.message.data
-        #TODO get owner's email
+        
+        poster_email = listing.user_email
+
         #TODO send email
         app.logger.info("Send email to pet owner with content")
+
         return redirect(url_for('root'))
 
     return render_template('adopt.html', listing=listing, form=form)

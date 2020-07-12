@@ -11,7 +11,7 @@ class User():
     def from_firestore(email, source):
         return User(email, source['profile']['name'], source['profile']['contact_number'], source['listings'])
 
-    def to_firestore(self):
+    def to_firestore(listing_id, self):
         return {
             "profile": {
                 "name": self.name,

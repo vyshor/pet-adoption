@@ -27,6 +27,7 @@ listings_db = db.collection('listings')
 #   breed [String]
 #   DOB [Unix timestamp - int]
 #   img_url [String]
+#   user_email [String]
 
 
 def create_user(user):
@@ -67,11 +68,45 @@ def delete_user(user_email):
         return False
 
 
+def create_listing(listing):
+    try:
+        res = users_db.document(listing.listing_id).set(listing.to_firestore())
+        log.info(res.update_time)
+        return True
+    except Exception as e:
+        log.error(e)
+        return False
+
+
 def get_listing(listing_id):
-    pass
+    try:
+        listing = listings_db.document(listing_id).get()
+        if listing.exists:
+            return Listing.from_firestore(listing_id, listing.to_dict())
+        return None
+    except Exception as e:
+        log.error(e)
+        return None
 
 def get_listings():
     listings = listings_db.stream()
 
     return [l.to_dict() for l in listings]
-    
+
+
+def update_listing(listing_id, listing_details):
+    try:
+        users_db.document(listing_id).update(listing_details)
+        return True
+    except Exception as e:
+        print(f"An Error Occured: {e}")
+
+
+def delete_listing(listing_id):
+    try:
+        users_db.document(listing_id).delete()
+        return True
+    except Exception as e:
+        log.error(e)
+        return False
+
