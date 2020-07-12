@@ -1,7 +1,9 @@
 import os
+import logging
+from users import User
 from firebase_admin import credentials, firestore, initialize_app
 
-print(os.getcwd())
+log = logging.getLogger('db')
 # Initialize Firestore DB
 cred = credentials.Certificate('servicekey.json')
 default_app = initialize_app(cred)
@@ -27,35 +29,25 @@ listings_db = db.collection('listings')
 #   img_url [String]
 
 
-def create_user():
+def create_user(user):
     try:
-        email = "test@test.com"
-        new_user = {
-            "profile": {
-                "name": "test",
-                "contact_number": "12345678"
-            },
-            "listings": []
-        }
-        print(users_db.document(email).set(new_user))
+        res = users_db.document(user.email).set(user.to_firestore())
+        log.info(res.update_time)
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
         return False
 
 
-def read_user(user_email):
+def get_user(email):
     try:
-        if users_db:
-            user_details = users_db.document(user_email).get()
-            print(user_details)
-            return True
-        else:
-            print("No DB found")
-            return False
+        user = users_db.document(email).get()
+        if user.exists:
+            return User.from_firestore(email, user.to_dict())
+        return None
     except Exception as e:
-        print(f"An Error Occured: {e}")
-        return False
+        log.error(e)
+        return None
 
 
 def update_user(user_email, user_details):
@@ -71,5 +63,11 @@ def delete_user(user_email):
         users_db.document(user_email).delete()
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
         return False
+
+
+def get_listings():
+    listings = listings_db.stream()
+
+    return [l.to_dict() for l in listings]
