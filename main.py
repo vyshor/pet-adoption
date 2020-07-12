@@ -13,10 +13,9 @@
 # limitations under the License.
 
 # [START gae_python38_render_template]
-import datetime
-import os
+import datetime, os, uuid
 
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
 from db_operations import *
 from forms import AdoptionForm
 
@@ -39,6 +38,42 @@ def adopt(pet=None):
         return redirect(url_for('root'))
     return render_template('adopt.html', pet=pet, form=form)
 
+
+@app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
+def handle_user(email):
+    if request.method == 'POST':
+        # TODO populate user details    
+        new_user = User("test@example.com_" + str(uuid.uuid4()), "name", "+6598765432", [])
+        created = create_user(new_user)
+       
+        if not created:
+            app.logger.error("Failed to create user")
+            abort(500, "Failed to create user")
+        return Response("", status=201, mimetype='application/json')
+    if request.method == 'GET':
+        user = get_user(email)
+        if not user:
+            app.logger.error(f"Failed to get user: {email}")
+            abort(404, description=f"Failed to get user: {email}")
+        return user.to_json()
+    if request.method == 'DELETE':
+        deleted = delete_user(email)
+        if not deleted:
+            app.logger.error(f"Failed to delete user: {email}")
+            abort(500, f"Failed to delete user: {email}")
+        return ('', 204)
+
+@app.route('/listings', methods=['GET', 'POST'])
+def handle_listings():
+    if request.method == 'POST':
+        # TODO implement
+        pass
+    if request.method == 'GET':
+        listings = get_listings()
+        if not listings:
+            app.logger.error("Failed to get listings")
+            abort(500, "Failed to get listings")
+        return jsonify(listings)
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
