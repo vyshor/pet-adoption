@@ -2,47 +2,85 @@
 <html>
   <head>
     <title>Pet Listing Form</title>
-    <link rel="stylesheet" href="../static/style1.css">
+      <link rel="stylesheet" href="../static/style1.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script>
+	$(function() {
+		$( ".dtpick" ).datepicker();
+	});
+	</script>
   </head>
   <body>
     <div class="testbox">
-      <form action="" method="POST">
+      <form action="" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <div class="banner">
           <h1>Create a listing</h1>
         </div>
         <h2>Pet's Details</h2>
         <div class="item">
-          <p>Name</p>
-          <div>
-                {{ form.name.label }}
-                {% if form.name.errors %}
-                    {{ form.name(placeholder="Name") }}
+                {{ form.email.label }}
+                {% if form.email.errors %}
+                    {{ form.email(placeholder="Your Email") }}
                     <div>
-                        {% for error in form.name.errors %}
+                        {% for error in form.email.errors %}
                             <span>{{ error }}</span>
                         {% endfor %}
                     </div>
                 {% else %}
-                    {{ form.name(placeholder="Name") }}
+                    {{ form.email(placeholder="Your Email") }}
                 {% endif %}
-            </div>
         </div>
+      <div class="item">
+                Pet's Name
+                {% if form.pet_name.errors %}
+                    {{ form.pet_name(placeholder="Pet's Name") }}
+                    <div>
+                        {% for error in form.pet_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.email(placeholder="Pet's Name") }}
+                {% endif %}
+        </div>
+      <div class="item">
+                Animal
+                {% if form.animal.errors %}
+                    {{ form.animal() }}
+                    <div>
+                        {% for error in form.animal.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.animal() }}
+                {% endif %}
+        </div>
+        Pet's Date of Birth
+        {{ form.dob(class="dtpick", placeholder="Date of Birth for your pet") }}
         <div class="item">
-            <select>
-              <option value="">Animal type</option>
-              <option value="1">Cats</option>
-              <option value="2">Dogs</option>
-              <option value="3">Other Pets</option>
-            </select>
+
           </div>
-            <h2>Tell us more!</h2>
-            <div class="textarea">
-                <textarea rows="10" cols="100">
-                </textarea>
-            </div>
-          <input type="file" id="petphoto" name="filename">
+            <h2>Tell us more about your pet!</h2>
+            {% if form.description_of_pet.errors %}
+                    {{ form.description_of_pet() }}
+                    <div>
+                        {% for error in form.description_of_pet.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.description_of_pet() }}
+                {% endif %}
+
           <div>
+          </div>
+           Upload your pet's photo
+            {{ form.upload_img }}
+        <div class="item">
                 {{ form.submit }}
             </div>
       </form>

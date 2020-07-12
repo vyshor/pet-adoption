@@ -17,7 +17,7 @@ import datetime, os, uuid
 
 from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
 from db_operations import *
-from forms import AdoptionForm
+from forms import AdoptionForm, CreateListingForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -25,7 +25,8 @@ app.config['SECRET_KEY'] = os.urandom(32)
 
 @app.route('/')
 def root():
-    return render_template('main.html')
+    listings = get_listings()
+    return render_template('main.html', listings=listings)
 
 
 @app.route('/adopt', methods=['GET', 'POST'])
@@ -37,6 +38,17 @@ def adopt(pet=None):
         #TODO send message with data from form
         return redirect(url_for('root'))
     return render_template('adopt.html', pet=pet, form=form)
+
+
+@app.route('/createlisting', methods=['GET', 'POST'])
+def createlisting():
+    form = CreateListingForm()
+    if form.validate_on_submit():
+        f = form.upload_img.data
+        print(f)
+        # TODO: Save the img file into Firebase (?)
+        return redirect(url_for('root'))
+    return render_template('listing.html', form=form)
 
 
 @app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
@@ -83,5 +95,5 @@ if __name__ == '__main__':
     # the "static" directory. See:
     # http://flask.pocoo.org/docs/1.0/quickstart/#static-files. Once deployed,
     # App Engine itself will serve those files as configured in app.yaml.
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run(host='127.0.0.1', port=8081, debug=True)
 # [START gae_python38_render_template]
