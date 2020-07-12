@@ -67,6 +67,9 @@ def delete_user(user_email):
         return False
 
 
+def get_listing(listing_id):
+    pass
+
 def get_listings():
     listings = listings_db.stream()
 
