@@ -29,15 +29,28 @@ def root():
     return render_template('main.html', listings=listings)
 
 
-@app.route('/adopt', methods=['GET', 'POST'])
-def adopt(pet=None):
-    # Pet set to none for testing the route
-    # Pet object expected to be passed when redirected from browsing
+@app.route('/adopt/<listing_id>', methods=['GET', 'POST'])
+def adopt(listing_id):
     form = AdoptionForm()
+        
+    listing = get_listing(listing_id)
+    if not listing:
+        app.logger.error(f"Failed to get listing: {listing_id}")
+        abort(404, description=f"Failed to get listing: {listing_id}")
+
     if form.validate_on_submit():
-        #TODO send message with data from form
+        adopter_name = form.name.data
+        adopter_email = form.email.data
+        email_message = form.message.data
+        
+        poster_email = listing.user_email
+
+        #TODO send email
+        app.logger.info("Send email to pet owner with content")
+
         return redirect(url_for('root'))
-    return render_template('adopt.html', pet=pet, form=form)
+
+    return render_template('adopt.html', listing=listing, form=form)
 
 
 @app.route('/createlisting', methods=['GET', 'POST'])
