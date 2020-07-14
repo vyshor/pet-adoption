@@ -96,46 +96,22 @@ http://www.templatemo.com/tm-500-fluid-gallery
                             <div class="tm-img-gallery-container">
                                 <div class="tm-img-gallery gallery-one">
                                 <!-- Gallery One pop up connected with JS code below -->
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/polite_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Polite Cat</h2>
-                                                <p class="tm-figure-description">This is a polite cat.</p>
-                                                <a href="{{ url_for('static', filename='images/polite_cat.jpg') }}">View more</a>
-                                            </figcaption>           
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/crying_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Crying Cat</h2>
-                                                <p class="tm-figure-description">This is a crying cat.</p>
-                                                <a href="{{ url_for('static', filename='images/crying_cat.jpg') }}">View more</a>
-                                            </figcaption>
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/swag_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Swag Cat</h2>
-                                                <p class="tm-figure-description">This cat got swag.</p>
-                                                <a href="{{ url_for('static', filename='images/swag_cat.jpg') }}">View more</a>
-                                            </figcaption>           
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/yelled_at_cat.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Yelled at cat</h2>
-                                                <p class="tm-figure-description">This cat is innocent.</p>
-                                                <a href="{{ url_for('static', filename='images/yelled_at_cat.jpg') }}">View more</a>
-                                            </figcaption>
-                                        </figure>
-                                    </div>
+
+                                    {% for listing in listings %}
+                                        {% if listing.animal == 'cat' %}
+                                            <div class="grid-item">
+                                                <figure class="effect-sadie">
+                                                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                                                    <figcaption>
+                                                        <h2 class="tm-figure-title">{{ listing.animal }}</h2>
+                                                        <p class="tm-figure-description">{{  listing.breed }}</p>
+                                                        <a href="{{ listing.img_url }}">View more</a>
+                                                    </figcaption>
+                                                </figure>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
                                 </div>                                 
                             </div>
                         </div>                                                    
@@ -150,46 +126,21 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <div class="tm-img-gallery gallery-two">
                                 <!-- Gallery Two pop up connected with JS code below -->
                                     
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/no_idea_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">No idea dog</h2>
-                                                <p class="tm-figure-description">This dog needs help.</p>
-                                                <a href="{{ url_for('static', filename='images/no_idea_dog.jpg') }}">View more</a>
-                                            </figcaption>           
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/doge.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Doge</h2>
-                                                <p class="tm-figure-description">Doge meme dog</p>
-                                                <a href="{{ url_for('static', filename='images/doge.jpg') }}">View more</a>
-                                            </figcaption>           
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/pun_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Pun dog</h2>
-                                                <p class="tm-figure-description">This dog got all the puns.</p>
-                                                <a href="{{ url_for('static', filename='images/pun_dog.jpg') }}">View more</a>
-                                            </figcaption>           
-                                        </figure>
-                                    </div>
-                                    <div class="grid-item">
-                                        <figure class="effect-sadie">
-                                            <img src="{{ url_for('static', filename='images/computer_dog.jpg') }}" alt="Image" class="img-fluid tm-img">
-                                            <figcaption>
-                                                <h2 class="tm-figure-title">Computer dog</h2>
-                                                <p class="tm-figure-description">A dog using the computer.</p>
-                                                <a href="{{ url_for('static', filename='images/computer_dog.jpg') }}">View more</a>
-                                            </figcaption>
-                                        </figure>
-                                    </div>
+                                    {% for listing in listings %}
+                                        {% if listing.animal == 'dog' %}
+                                            <div class="grid-item">
+                                                <figure class="effect-sadie">
+                                                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                                                    <figcaption>
+                                                        <h2 class="tm-figure-title">{{ listing.animal }}</h2>
+                                                        <p class="tm-figure-description">{{  listing.breed }}</p>
+                                                        <a href="{{ listing.img_url }}">View more</a>
+                                                    </figcaption>
+                                                </figure>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+
                                 </div>                                 
                             </div>
                         </div>                      
@@ -203,6 +154,21 @@ http://www.templatemo.com/tm-500-fluid-gallery
                             <div class="tm-img-gallery-container">
                                 <div class="tm-img-gallery gallery-three">
                                 <!-- Gallery Two pop up connected with JS code below -->
+
+                                    {% for listing in listings %}
+                                        {% if listing.animal != 'cat' and listing.animal != 'dog' %}
+                                            <div class="grid-item">
+                                                <figure class="effect-sadie">
+                                                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                                                    <figcaption>
+                                                        <h2 class="tm-figure-title">{{ listing.animal }}</h2>
+                                                        <p class="tm-figure-description">{{  listing.breed }}</p>
+                                                        <a href="{{ listing.img_url }}">View more</a>
+                                                    </figcaption>
+                                                </figure>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
 
                             </div> <!-- .tm-img-gallery-container -->
                         </div>         

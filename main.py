@@ -17,7 +17,7 @@ import datetime, os, uuid
 
 from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
 from db_operations import *
-from forms import AdoptionForm
+from forms import AdoptionForm, CreateListingForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -25,7 +25,8 @@ app.config['SECRET_KEY'] = os.urandom(32)
 
 @app.route('/')
 def root():
-    return render_template('main.html')
+    listings = get_listings()
+    return render_template('main.html', listings=listings)
 
 
 @app.route('/adopt/<listing_id>', methods=['GET', 'POST'])
@@ -50,6 +51,17 @@ def adopt(listing_id):
         return redirect(url_for('root'))
 
     return render_template('adopt.html', listing=listing, form=form)
+
+
+@app.route('/createlisting', methods=['GET', 'POST'])
+def createlisting():
+    form = CreateListingForm()
+    if form.validate_on_submit():
+        f = form.upload_img.data
+        print(f)
+        # TODO: Save the img file into Firebase (?)
+        return redirect(url_for('root'))
+    return render_template('listing.html', form=form)
 
 
 @app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])

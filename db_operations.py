@@ -23,10 +23,12 @@ listings_db = db.collection('listings')
 #
 # db.collection('listings')
 #   listing_id [String]
+#   name [String]
 #   animal [String]
 #   breed [String]
 #   DOB [Unix timestamp - int]
 #   img_url [String]
+#   description_of_pet [String]
 #   user_email [String]
 
 
