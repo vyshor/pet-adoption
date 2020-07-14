@@ -15,6 +15,7 @@ class CreateListingForm(FlaskForm):
     email = StringField(validators=[DataRequired(), Email()])
     pet_name = StringField(validators=[DataRequired()])
     animal = SelectField("dog", choices=[("dog", "dog"), ("cat", "cat"), ("others", "other animals")])
+    breed = StringField(validators=[DataRequired()])
     dob = DateField('Pick a Date', format="%m/%d/%Y")
     description_of_pet = TextAreaField(validators=[Optional(), Length(max=200)])
     upload_img = FileField('image', validators=[

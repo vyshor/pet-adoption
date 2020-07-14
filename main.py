@@ -18,15 +18,37 @@ import datetime, os, uuid
 from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
 from db_operations import *
 from forms import AdoptionForm, CreateListingForm
+from listings import Listing
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def root():
-    listings = get_listings()
-    return render_template('main.html', listings=listings)
+    if request.method == 'GET':
+        listings = get_listings()
+        form = CreateListingForm()
+        if form.validate_on_submit():
+            print(form.email)
+            f = form.upload_img.data
+            print(f)
+            # TODO: Save the img file into Firebase (?)
+        return render_template('main.html', listings=listings, form=form)
+    if request.method == 'POST':
+        form_dict = request.form.to_dict()
+        new_listing = Listing(
+            form_dict['animal'],
+            form_dict['breed'],
+            form_dict['dob'],
+            form_dict['description_of_pet'],
+            'img_url',
+            form_dict['email'],
+        )
+        create_listing(new_listing)
+        return redirect(url_for('root'))
+
 
 
 @app.route('/adopt/<listing_id>', methods=['GET', 'POST'])
@@ -53,15 +75,19 @@ def adopt(listing_id):
     return render_template('adopt.html', listing=listing, form=form)
 
 
-@app.route('/createlisting', methods=['GET', 'POST'])
-def createlisting():
-    form = CreateListingForm()
-    if form.validate_on_submit():
-        f = form.upload_img.data
-        print(f)
-        # TODO: Save the img file into Firebase (?)
-        return redirect(url_for('root'))
-    return render_template('listing.html', form=form)
+# @app.route('/createlisting', methods=['GET', 'POST'])
+# def createlisting():
+#     if request.method == 'POST':
+#         new_listing = Listing()
+#         return Response("", status=201, mimetype='application/json')
+#     if request.method == 'GET':
+#         form = CreateListingForm()
+#         if form.validate_on_submit():
+#             f = form.upload_img.data
+#             print(f)
+#             # TODO: Save the img file into Firebase (?)
+#             return redirect(url_for('root'))
+#         return render_template('listing.html', form=form)
 
 
 @app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
