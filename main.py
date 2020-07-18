@@ -32,12 +32,12 @@ mail = Mail(app)
 
 def send_email(poster_email, adopter_email, adopter_name, email_message):
     msg = Message('Someone wants to adopt your pet!', sender='petadoption.sps@gmail.com',
-                recipients=[poster_email])
+                recipients=[poster_email], reply_to=adopter_email)
     msg.body = f'''Hello!
 
     {adopter_name} is interested in your pet! They said:
     {email_message}
-    If you think they will make a good family for your pet, do contact them at {adopter_email}.
+    If you think they will make a good family for your pet, simply reply to this message to send them an email.
     
     Cheers!
     '''
