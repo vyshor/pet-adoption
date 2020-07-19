@@ -16,12 +16,33 @@
 import datetime, os, uuid
 
 from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
+from flask_mail import Mail, Message
 from db_operations import *
 from forms import AdoptionForm, CreateListingForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'petadoption.sps@gmail.com'
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD") # SET password as environment variable
 
+mail = Mail(app)
+
+def send_email(poster_email, adopter_email, adopter_name, email_message):
+    msg = Message('Someone wants to adopt your pet!', sender='petadoption.sps@gmail.com',
+                recipients=[poster_email], reply_to=adopter_email)
+    msg.body = f'''Hello!
+
+    {adopter_name} is interested in your pet! They said:
+    {email_message}
+    If you think they will make a good family for your pet, simply reply to this message to send them an email.
+    
+    Cheers!
+    '''
+
+    mail.send(msg)
 
 @app.route('/')
 def root():
@@ -45,8 +66,8 @@ def adopt(listing_id):
         
         poster_email = listing.user_email
 
-        #TODO send email
-        app.logger.info("Send email to pet owner with content")
+        send_email(poster_email, adopter_email, adopter_name, email_message)
+        app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
 
         return redirect(url_for('root'))
 
