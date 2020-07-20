@@ -86,7 +86,7 @@ def create_empty_listing():
         return doc_ref.id
     except Exception as e:
         log.error(e)
-        return False
+        return None
 
 
 def get_listing(listing_id):
