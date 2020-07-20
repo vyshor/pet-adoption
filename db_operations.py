@@ -80,6 +80,15 @@ def create_listing(listing):
         return False
 
 
+def create_empty_listing():
+    try:
+        doc_ref = listings_db.document()
+        return doc_ref.id
+    except Exception as e:
+        log.error(e)
+        return None
+
+
 def get_listing(listing_id):
     try:
         listing = listings_db.document(listing_id).get()
