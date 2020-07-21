@@ -109,7 +109,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 
                                     {% for listing in listings %}
                                         {% if listing.animal == 'cat' %}
-                                            <div class="grid-item">
+                                            <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
                                                     <figcaption>
@@ -167,7 +167,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 
                                     {% for listing in listings %}
                                         {% if listing.animal != 'cat' and listing.animal != 'dog' %}
-                                            <div class="grid-item">
+                                            <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
                                                     <figcaption>
