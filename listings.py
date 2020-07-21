@@ -1,9 +1,9 @@
 import json
-from db_operations import create_empty_listing
 
 class Listing():
-    def __init__(self, animal, breed, dob, description, img_url, user_email, listing_id=''):
+    def __init__(self, pet_name, animal, breed, dob, description, img_url, user_email, listing_id):
         self.listing_id = listing_id
+        self.pet_name = pet_name
         self.animal = animal
         self.breed = breed
         self.dob = dob
@@ -11,18 +11,14 @@ class Listing():
         self.img_url = img_url
         self.user_email = user_email
 
-        # Listing_id is the document id when uploaded into firebase
-        # Thus, it is automatically generated once it is uploaded
-        if not listing_id:
-            self.listing_id = create_empty_listing()
-
     @staticmethod
     def from_firestore(listing_id, source):
-        return Listing(listing_id, source['animal'], source['breed'], source['dob'], source['img_url'], source['user_email'])
+        return Listing(source['pet_name'], source['animal'], source['breed'], source['dob'], source['description'], source['img_url'], source['user_email'], listing_id)
 
     def to_firestore(self):
         return {
             "animal": self.animal,
+            "pet_name": self.pet_name,
             "breed": self.breed,
             "dob": self.dob,
             "img_url": self.img_url,
@@ -31,3 +27,5 @@ class Listing():
     
     def to_json(self):
         return json.dumps(self, default = lambda o: o.__dict__)
+
+

@@ -19,7 +19,6 @@ from flask import Flask, render_template, redirect, url_for, request, abort, Res
 from flask_mail import Mail, Message
 from db_operations import *
 from forms import AdoptionForm, CreateListingForm
-from listings import Listing
 
 
 app = Flask(__name__)
@@ -48,11 +47,22 @@ def send_email(poster_email, adopter_email, adopter_name, email_message):
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
+    if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
         if form.validate_on_submit():
-            form_dict = request.form.to_dict()
-            new_listing = Listing(
+            print(form.email)
+            f = form.upload_img.data
+            print(f)
+            # TODO: Save the img file into Firebase (?)
+        print(listings)
+        return render_template('main.html', listings=listings, form=form)
+    elif request.method == 'POST':
+        form_dict = request.form.to_dict()
+        print(form_dict)
+        try:
+            new_listing = createListingWithoutId(
+                form_dict['pet_name'],
                 form_dict['animal'],
                 form_dict['breed'],
                 form_dict['dob'],
@@ -60,10 +70,11 @@ def root():
                 'img_url',
                 form_dict['email'],
             )
+            print(new_listing.listing_id)
             create_listing(new_listing)
-            # TODO: Save the img file into Firebase (?)
-            return redirect(url_for('root'))
-        return render_template('main.html', listings=listings, form=form)
+        except:
+            pass
+        return redirect(url_for('root'))
 
 
 
@@ -116,11 +127,8 @@ def handle_user(email):
             abort(500, f"Failed to delete user: {email}")
         return ('', 204)
 
-@app.route('/listings', methods=['GET', 'POST'])
+@app.route('/listings', methods=['GET'])
 def handle_listings():
-    if request.method == 'POST':
-        # TODO implement
-        pass
     if request.method == 'GET':
         listings = get_listings()
         if not listings:

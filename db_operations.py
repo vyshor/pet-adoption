@@ -2,6 +2,7 @@ import os
 import logging
 from users import User
 from firebase_admin import credentials, firestore, initialize_app
+from listings import Listing
 
 log = logging.getLogger('db')
 # Initialize Firestore DB
@@ -85,15 +86,24 @@ def create_empty_listing():
         doc_ref = listings_db.document()
         return doc_ref.id
     except Exception as e:
+        print("Error")
         log.error(e)
         return None
+
+def createListingWithoutId(pet_name, animal, breed, dob, description, img_url, user_email):
+    listing_id = create_empty_listing()
+    return Listing(pet_name, animal, breed, dob, description, img_url, user_email, listing_id)
 
 
 def get_listing(listing_id):
     try:
         listing = listings_db.document(listing_id).get()
+
         if listing.exists:
-            return Listing.from_firestore(listing_id, listing.to_dict())
+            listing = listing.to_dict()
+            if not listing.get('description'):
+                listing['description'] = ''
+            return Listing.from_firestore(listing_id, listing)
         return None
     except Exception as e:
         log.error(e)
@@ -102,7 +112,7 @@ def get_listing(listing_id):
 def get_listings():
     listings = listings_db.stream()
 
-    return [l.to_dict() for l in listings]
+    return [{"listing_id": l.id,  **l.to_dict()} for l in listings]
 
 
 def update_listing(listing_id, listing_details):
