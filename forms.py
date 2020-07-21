@@ -20,6 +20,6 @@ class CreateListingForm(FlaskForm):
     description_of_pet = TextAreaField(validators=[Optional(), Length(max=200)])
     upload_img = FileField('image', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
+        FileAllowed(tuple('jpg jpe jpeg png gif svg bmp webp'.split()), 'Images only!')
     ])
     submit = SubmitField('Submit')
