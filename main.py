@@ -51,21 +51,12 @@ def root():
     if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
-        if form.validate_on_submit():
-            print(form.email)
-            f = form.upload_img.data
-
-            print(f)
-            # TODO: Save the img file into Firebase (?)
-        print(listings)
         return render_template('main.html', listings=listings, form=form)
     elif request.method == 'POST':
         for key, upload in request.files.items():
             identity = str(uuid.uuid4())  # or uuid.uuid4().hex
-            print(identity)
             try:
                 img_url = upload_blob(request.files[key], identity, content_type=upload.content_type)
-                print(img_url)
             except:
                 pass
         form_dict = request.form.to_dict()

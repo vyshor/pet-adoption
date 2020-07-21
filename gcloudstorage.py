@@ -11,9 +11,6 @@ def upload_blob(source_file_name, destination_blob_name, content_type="applicati
     blob.upload_from_file(source_file_name, content_type=content_type)
     blob.make_public()
 
-    print('File {} uploaded to {}.'.format(
-        source_file_name,
-        destination_blob_name))
     return blob.public_url
 
 

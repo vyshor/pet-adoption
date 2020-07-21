@@ -86,7 +86,6 @@ def create_empty_listing():
         doc_ref = listings_db.document()
         return doc_ref.id
     except Exception as e:
-        print("Error")
         log.error(e)
         return None
 
