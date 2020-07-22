@@ -22,7 +22,8 @@ class Listing():
             "breed": self.breed,
             "dob": self.dob,
             "img_url": self.img_url,
-            "user_email": self.user_email
+            "user_email": self.user_email,
+            "description_of_pet": self.description
         }
     
     def to_json(self):
