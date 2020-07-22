@@ -84,15 +84,15 @@ def adopt(listing_id):
     # if not listing:
     #     app.logger.error(f"Failed to get listing: {listing_id}")
     #     abort(404, description=f"Failed to get listing: {listing_id}")
+    if listing:
+        adopter_name = request.form["name"]
+        adopter_email = request.form["email"]
+        email_message = request.form["message"]
 
-    adopter_name = request.form["name"]
-    adopter_email = request.form["email"]
-    email_message = request.form["message"]
-        
-    poster_email = listing.user_email
+        poster_email = listing.user_email
 
-    send_email(poster_email, adopter_email, adopter_name, email_message)
-    app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
+        send_email(poster_email, adopter_email, adopter_name, email_message)
+        app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
 
     return redirect(url_for('root'))
 
