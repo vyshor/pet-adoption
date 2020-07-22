@@ -51,59 +51,50 @@ def root():
     form = CreateListingForm()
     if request.method == 'GET':
         listings = get_listings()
-        return render_template('main.html', listings=listings, form=form)
-        
-    if not form.validate_on_submit():
-        app.logger.error(form.errors)
-        return redirect(url_for('root'))
-
-    for key, upload in request.files.items():
-        identity = str(uuid.uuid4())  # or uuid.uuid4().hex
+        form = CreateListingForm()
+        adoptform = AdoptionForm()
+        return render_template('main.html', listings=listings, form=form, adoptform=adoptform)
+    elif request.method == 'POST':
+        for key, upload in request.files.items():
+            identity = str(uuid.uuid4())  # or uuid.uuid4().hex
+            try:
+                img_url = upload_blob(request.files[key], identity, content_type=upload.content_type)
+                app.logger.info(f'uploaded images to gcloud with url {img_url}')
+            except Exception as e:
+                app.logger.error(e)
+        form_dict = request.form.to_dict()
         try:
-            img_url = upload_blob(request.files[key], identity, content_type=upload.content_type)
-            app.logger.info(f'uploaded images to gcloud with url {img_url}')
+            new_listing = createListingWithoutId(
+                form_dict['pet_name'],
+                form_dict['animal'],
+                form_dict['breed'],
+                form_dict['dob'],
+                form_dict['description_of_pet'],
+                img_url,
+                form_dict['email'],
+            )
+            create_listing(new_listing)
         except Exception as e:
             app.logger.error(e)
-    form_dict = request.form.to_dict()
-    try:
-        new_listing = createListingWithoutId(
-            form_dict['pet_name'],
-            form_dict['animal'],
-            form_dict['breed'],
-            form_dict['dob'],
-            form_dict['description_of_pet'],
-            img_url,
-            form_dict['email'],
-        )
-        create_listing(new_listing)
-    except Exception as e:
-        app.logger.error(e)
+        return redirect(url_for('root'))
 
-    return redirect(url_for('root'))
-
-
-@app.route('/adopt/<listing_id>', methods=['GET', 'POST'])
+@app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):
-    form = AdoptionForm()
-        
     listing = get_listing(listing_id)
-    if not listing:
-        app.logger.error(f"Failed to get listing: {listing_id}")
-        abort(404, description=f"Failed to get listing: {listing_id}")
+    # if not listing:
+    #     app.logger.error(f"Failed to get listing: {listing_id}")
+    #     abort(404, description=f"Failed to get listing: {listing_id}")
+    if listing:
+        adopter_name = request.form["name"]
+        adopter_email = request.form["email"]
+        email_message = request.form["message"]
 
-    if form.validate_on_submit():
-        adopter_name = form.name.data
-        adopter_email = form.email.data
-        email_message = form.message.data
-        
         poster_email = listing.user_email
 
         send_email(poster_email, adopter_email, adopter_name, email_message)
         app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
 
-        return redirect(url_for('root'))
-
-    return render_template('adopt.html', listing=listing, form=form)
+    return redirect(url_for('root'))
 
 
 

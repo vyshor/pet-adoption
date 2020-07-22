@@ -13,7 +13,7 @@ class Listing():
 
     @staticmethod
     def from_firestore(listing_id, source):
-        return Listing(source['pet_name'], source['animal'], source['breed'], source['dob'], source['description'], source['img_url'], source['user_email'], listing_id)
+        return Listing(source['pet_name'], source['animal'], source['breed'], source['dob'], source['description_of_pet'], source['img_url'], source['user_email'], listing_id)
 
     def to_firestore(self):
         return {
@@ -22,7 +22,8 @@ class Listing():
             "breed": self.breed,
             "dob": self.dob,
             "img_url": self.img_url,
-            "user_email": self.user_email
+            "user_email": self.user_email,
+            "description_of_pet": self.description
         }
     
     def to_json(self):

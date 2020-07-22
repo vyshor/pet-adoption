@@ -7,7 +7,7 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 class AdoptionForm(FlaskForm):
     name = StringField(validators=[DataRequired()])
     email = StringField(validators=[DataRequired(), Email()])
-    message = StringField(validators=[DataRequired(), Length(max=400)])
+    message = TextAreaField(validators=[DataRequired(), Length(max=400)])
     submit = SubmitField('Submit')
 
 
