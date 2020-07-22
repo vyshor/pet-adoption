@@ -51,7 +51,8 @@ def root():
     if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
-        return render_template('main.html', listings=listings, form=form)
+        adoptform = AdoptionForm()
+        return render_template('main.html', listings=listings, form=form, adoptform=adoptform)
     elif request.method == 'POST':
         for key, upload in request.files.items():
             identity = str(uuid.uuid4())  # or uuid.uuid4().hex
@@ -77,28 +78,23 @@ def root():
 
 
 
-@app.route('/adopt/<listing_id>', methods=['GET', 'POST'])
+@app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):
-    form = AdoptionForm()
-        
     listing = get_listing(listing_id)
-    if not listing:
-        app.logger.error(f"Failed to get listing: {listing_id}")
-        abort(404, description=f"Failed to get listing: {listing_id}")
+    # if not listing:
+    #     app.logger.error(f"Failed to get listing: {listing_id}")
+    #     abort(404, description=f"Failed to get listing: {listing_id}")
 
-    if form.validate_on_submit():
-        adopter_name = form.name.data
-        adopter_email = form.email.data
-        email_message = form.message.data
+    adopter_name = request.form["name"]
+    adopter_email = request.form["email"]
+    email_message = request.form["message"]
         
-        poster_email = listing.user_email
+    poster_email = listing.user_email
 
-        send_email(poster_email, adopter_email, adopter_name, email_message)
-        app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
+    send_email(poster_email, adopter_email, adopter_name, email_message)
+    app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
 
-        return redirect(url_for('root'))
-
-    return render_template('adopt.html', listing=listing, form=form)
+    return redirect(url_for('root'))
 
 
 

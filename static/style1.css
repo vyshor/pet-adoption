@@ -196,6 +196,7 @@ width: calc(50% - 8px);
     position: relative;
     margin: 0 0 0 0;
     font-weight: 700;
+    border: none;
 
 }
 

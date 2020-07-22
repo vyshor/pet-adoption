@@ -22,6 +22,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
     <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">                                 
     <!-- Magnific popup style (http://dimsemenov.com/plugins/magnific-popup/) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+    <!-- Flexbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <!-- Flexbox Helpers -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flexboxgrid-helpers.min.css') }}">
 
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -88,7 +92,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 {#                                    <a class="nav-link" href="#0" data-no="4">Who are we</a>#}
 {#                                </li>#}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#0" data-no="4">Put pet for adoption</a>
+                                    <a class="nav-link" href="#0" data-no="4">Have a pet for adoption?</a>
                                 </li>
                             </ul>
                         </div>                        
@@ -291,7 +295,85 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     </div> <!-- .cd-full-width -->
                 </li>
             </ul> <!-- .cd-hero-slider -->
-            
+
+            <!-- Pop ups for the listing -->
+            {% for listing in listings %}
+            <div class="white-popup center mfp-hide row" id="{{ listing.listing_id }}_modal">
+                <div class="card col-xs">
+                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                    <div class="name "><p>{{ listing.pet_name }}</p></div>
+                    <div class="numbers ">
+                        <table class="stats">
+                            <tbody>
+                            <tr>
+                                <td>Breed</td>
+                                <td>{{ listing.breed }}</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday</td>
+                                <td>{{ listing.dob }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="divider"></div>
+                    </div>
+                    <div><a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-follow">Adopt</a></div>
+                </div>
+                <div class="col-xs" style="display: none;" id="{{ listing.listing_id }}_form">
+                    <form action="/adopt/{{ listing.listing_id }}" method="POST" style="box-shadow: none;" style="text-align: left;">
+                    {{ adoptform.hidden_tag() }}
+                        <div class="item" style="text-align:left;">
+                        <h2 class="tm-contact-info">Your Name</h2>
+                            {% if adoptform.name.errors %}
+                                {{ adoptform.name(placeholder="Name") }}
+                                <div>
+                                    {% for error in adoptform.name.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ adoptform.name(placeholder="Name") }}
+                            {% endif %}
+                        </div>
+                        <div class="item"  style="text-align:left;">
+                        <h2 class="tm-contact-info">Your Email</h2>
+                            {% if adoptform.email.errors %}
+                                {{ adoptform.email(placeholder="Email") }}
+                                <div>
+                                    {% for error in adoptform.email.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ adoptform.email(placeholder="Email") }}
+                            {% endif %}
+                        </div>
+                        <div class="item"  style="text-align:left;">
+                        <h2 class="tm-contact-info">Message to the owner</h2>
+                            <div>
+                            {% if adoptform.message.errors %}
+                                {{ adoptform.message(placeholder="Write a message...", style="width: 100%;") }}
+                                <div>
+                                    {% for error in adoptform.message.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ adoptform.message(placeholder="Write a message...", style="width: 100%;") }}
+                            {% endif %}
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="pull-xs-right tm-submit-btn">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+
+
+
+
             <footer class="tm-footer">
             
                 <div class="tm-social-icons-container text-xs-center">
@@ -380,31 +462,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     }
                 }
 
-                function mapListingItems(listing, idx) {
-                    return {
-                        src: $('<div class="white-popup center">' +
-                                `<div class="card">` +
-                                `<img src="${listing.img_url}" alt="Image" class="img-fluid tm-img">
-                                <div class="name "><p>${listing.pet_name}</p></div>
-                                <div class="numbers ">
-                                    <table class="stats">
-                                        <tbody>
-                                        <tr>
-                                            <td>Breed</td>
-                                            <td>${listing.breed}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Birthday</td>
-                                            <td>${listing.dob}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="divider"></div>
-                                </div>
-                                <div><a href="/adopt/${listing.listing_id}" class="btn btn-follow">Adopt</a></div>
 
-                            </div>` +
-                            '</div>'),
+                function mapListingItems(listing) {
+                    return {
+                        src: `#${listing.listing_id}_modal`,
                         type: 'inline'
                     }
                 }
@@ -415,7 +476,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
                         items: dog_listing.map(mapListingItems),
                         index: idx,
                         type: 'image',
-                        gallery:{enabled:true}
+                        gallery:{
+                            enabled:true,
+                            preload: [4,4]
+                        }
                     });
                 }
 
@@ -424,7 +488,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
                         items: cat_listing.map(mapListingItems),
                         index: idx,
                         type: 'image',
-                        gallery:{enabled:true}
+                        gallery:{
+                            enabled:true,
+                            preload: [4,4]
+                        }
                     });
                 }
 
@@ -433,7 +500,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
                         items: other_listing.map(mapListingItems),
                         index: idx,
                         type: 'image',
-                        gallery:{enabled:true}
+                        gallery:{
+                            enabled:true,
+                            preload: [4,4]
+                        }
                     });
                 }
 
