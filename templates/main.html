@@ -301,7 +301,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
             {% for listing in listings %}
             <div class="white-popup center mfp-hide row" id="{{ listing.listing_id }}_modal">
                 <div class="card col-xs">
-                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img2">
                     <div class="name"><p>{{ listing.pet_name }}</p></div>
                     <div class="numbers" style="max-width: 40vw">
                         <table class="stats">
@@ -314,10 +314,10 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <td>Birthday</td>
                                 <td>{{ listing.dob }}</td>
                             </tr>
-                            {% if listing.description %}
+                            {% if listing.description_of_pet %}
                             <tr>
                                 <td>Description</td>
-                                <td>{{ listing.description }}</td>
+                                <td>{{ listing.description_of_pet }}</td>
                             </tr>
                             {%  endif %}
                             </tbody>
@@ -329,7 +329,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 {#                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci, amet consectetur dolor ducimus excepturi explicabo in, iusto laudantium, mollitia natus nesciunt nisi odit optio quidem sapiente tempore totam voluptas.</p>#}
 {#                    </div>#}
                     <div class="divider"></div>
-                    <div><a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-follow">Adopt</a></div>
+                    <div><a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-follow"><i class="fa fa-paw" aria-hidden="true"></i>  Adopt me pls</a></div>
                 </div>
                 <div class="col-xs" style="display: none;" id="{{ listing.listing_id }}_form">
                     <form action="/adopt/{{ listing.listing_id }}" method="POST" style="box-shadow: none;" style="text-align: left;">

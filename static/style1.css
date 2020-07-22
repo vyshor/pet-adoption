@@ -283,16 +283,19 @@ a.btn-follow:active {
 
 .btn-follow {
     background: #00936E;
-    height: 32px;
+    height: 38px;
     width: 50%;
     display: inline-block;
     margin: 0 auto;
+    font-size: 1.2em;
     bottom: 1.25em;
-    font-size: .8em;
     font-weight: 700;
-    line-height: 34px;
     border-radius: 2px;
     border-bottom: 1px solid #006D59;
+}
+
+a.btn-follow {
+    color: white !important;
 }
 
 .mfp-content {

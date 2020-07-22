@@ -398,10 +398,19 @@ border-top-color: #f9c922; /* Chrome, Opera 15+, Safari 5+ */ animation: spin 1.
 }
 
 .tm-img {
-  	width: 320px;
+  	width: 100%;
   	height: 320px;
   	border: none;
   	margin: 0 auto;
+	object-fit: cover;
+}
+
+.tm-img2 {
+  	width: 400px;
+  	height: 400px;
+  	border: none;
+  	margin: 0 auto;
+	object-fit: cover;
 }
 
 .tm-textbox-padding { padding: 35px 30px; }
