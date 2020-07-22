@@ -48,6 +48,7 @@ def send_email(poster_email, adopter_email, adopter_name, email_message):
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
+    form = CreateListingForm()
     if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
@@ -58,8 +59,9 @@ def root():
             identity = str(uuid.uuid4())  # or uuid.uuid4().hex
             try:
                 img_url = upload_blob(request.files[key], identity, content_type=upload.content_type)
-            except:
-                pass
+                app.logger.info(f'uploaded images to gcloud with url {img_url}')
+            except Exception as e:
+                app.logger.error(e)
         form_dict = request.form.to_dict()
         try:
             new_listing = createListingWithoutId(
@@ -72,11 +74,9 @@ def root():
                 form_dict['email'],
             )
             create_listing(new_listing)
-        except:
-            pass
+        except Exception as e:
+            app.logger.error(e)
         return redirect(url_for('root'))
-
-
 
 @app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):
