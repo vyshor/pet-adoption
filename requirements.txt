@@ -1,4 +1,5 @@
 Flask==1.1.2
+flask-login
 firebase_admin
 Flask-WTF==0.14.2
 Werkzeug==0.15.6

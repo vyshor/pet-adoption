@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, TextAreaField
+from flask_wtf.file import FileAllowed, FileField, FileRequired
+from wtforms import (DateField, PasswordField, SelectField, StringField, 
+                     SubmitField, TextAreaField)
 from wtforms.validators import DataRequired, Email, Length, Optional
-from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 
 class AdoptionForm(FlaskForm):
@@ -22,4 +23,17 @@ class CreateListingForm(FlaskForm):
         FileRequired(),
         FileAllowed(tuple('jpg jpe jpeg png gif svg bmp webp'.split()), 'Images only!')
     ])
+    submit = SubmitField('Submit')
+
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[Email()])
+    password = PasswordField('Password')
+    submit = SubmitField('Submit')
+
+
+class SignupForm(FlaskForm):
+    email = StringField('Email', validators=[Email(), DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Submit')

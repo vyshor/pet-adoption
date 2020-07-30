@@ -1,10 +1,12 @@
-import os
 import logging
-from users import User
-from firebase_admin import credentials, firestore, initialize_app
-from listings import Listing
+import os
 
-log = logging.getLogger('db')
+from firebase_admin import credentials, firestore, initialize_app
+from flask import current_app
+
+from listings import Listing
+from users import User
+
 # Initialize Firestore DB
 cred = credentials.Certificate('servicekey.json')
 default_app = initialize_app(cred)
@@ -33,10 +35,12 @@ listings_db = db.collection('listings')
 #   user_email [String]
 
 
-def create_user(user):
+def create_user(user: User):
+    log = current_app.logger
+    log.info('creating new user %s', user.email)
     try:
         res = users_db.document(user.email).set(user.to_firestore())
-        log.info(res.update_time)
+        log.info('created new user %s at %s', user.email, res.update_time)
         return True
     except Exception as e:
         log.error(e)
@@ -72,6 +76,7 @@ def delete_user(user_email):
 
 
 def create_listing(listing):
+    log = current_app.logger
     try:
         res = listings_db.document(listing.listing_id).set(listing.to_firestore())
         log.info(res.update_time)
@@ -129,4 +134,3 @@ def delete_listing(listing_id):
     except Exception as e:
         log.error(e)
         return False
-
