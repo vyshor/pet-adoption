@@ -1,8 +1,11 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField, FileRequired
-from wtforms import (DateField, PasswordField, SelectField, StringField, 
+from wtforms import (DateField, PasswordField, SelectField, StringField,
                      SubmitField, TextAreaField)
-from wtforms.validators import DataRequired, Email, Length, Optional
+from wtforms.validators import (DataRequired, Email, Length, Optional,
+                                ValidationError)
+
+from db_operations import get_user
 
 
 class AdoptionForm(FlaskForm):
@@ -37,3 +40,8 @@ class SignupForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+    def validate_email(form, email_field):
+        user = get_user(email_field.data)
+        if user:
+            raise ValidationError(f'Email {email_field.data} has already been taken, please use another email')
