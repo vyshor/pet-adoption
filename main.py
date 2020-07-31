@@ -13,14 +13,19 @@
 # limitations under the License.
 
 # [START gae_python38_render_template]
-import datetime, os, uuid
+import datetime
+import os
+import uuid
 
-from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
+from flask import (Flask, Response, abort, jsonify, redirect, render_template,
+                   request, url_for)
 from flask_mail import Mail, Message
+from flask_login import LoginManager, current_user, login_required
+
+from auth import auth as auth_blueprint
 from db_operations import *
 from forms import AdoptionForm, CreateListingForm
 from gcloudstorage import upload_blob
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -29,6 +34,12 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'petadoption.sps@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD") # SET password as environment variable
+
+app.register_blueprint(auth_blueprint)
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
 mail = Mail(app)
 
@@ -48,7 +59,6 @@ def send_email(poster_email, adopter_email, adopter_name, email_message):
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    form = CreateListingForm()
     if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
@@ -81,22 +91,21 @@ def root():
 @app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):
     listing = get_listing(listing_id)
-    # if not listing:
-    #     app.logger.error(f"Failed to get listing: {listing_id}")
-    #     abort(404, description=f"Failed to get listing: {listing_id}")
-    if listing:
-        adopter_name = request.form["name"]
-        adopter_email = request.form["email"]
-        email_message = request.form["message"]
+    if not listing:
+        app.logger.error(f"Failed to get listing: {listing_id}")
+        abort(404, description=f"Failed to get listing: {listing_id}")
+        return
+    
+    adopter_name = request.form["name"]
+    adopter_email = request.form["email"]
+    email_message = request.form["message"]
 
-        poster_email = listing.user_email
+    poster_email = listing.user_email
 
-        send_email(poster_email, adopter_email, adopter_name, email_message)
-        app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
+    send_email(poster_email, adopter_email, adopter_name, email_message)
+    app.logger.info(f"Sent email to {poster_email} with message from {adopter_email}")
 
     return redirect(url_for('root'))
-
-
 
 @app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
 def handle_user(email):
@@ -130,6 +139,22 @@ def handle_listings():
             app.logger.error("Failed to get listings")
             abort(500, "Failed to get listings")
         return jsonify(listings)
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', name=current_user.name)
+
+@login_manager.user_loader
+def load_user(user_id):
+    ''' 
+    Take unicode id of user and return corresponding user object
+    See https://flask-login.readthedocs.io/en/latest/#how-it-works
+
+    We use email as the user_id
+    '''
+    return get_user(user_id)
+
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App

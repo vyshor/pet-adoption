@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Flask Intro - login page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Signup</h1>
+      <br>
+      {% from "_formhelpers.html" import render_field %}
+      <form action="/signup" method="post">
+        <dl>
+            {{ form.hidden_tag() }}
+            {{ render_field(form.email) }}
+            {{ render_field(form.name)  }}
+            {{ render_field(form.password) }}
+            {{ render_field(form.submit) }}
+          </dl>
+      </form>
+      {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    </div>
+  </body>
+</html>
