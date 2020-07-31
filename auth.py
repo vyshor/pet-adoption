@@ -64,6 +64,11 @@ def login():
             flash('Please check your login details and try again.')
             return redirect(url_for('auth.login'))
         
+        if not user.verified:
+            log.info('login failed')
+            flash('Please check your email and verify your account first')
+            return redirect(url_for('auth.login'))
+
         log.info('login success')
         login_user(user, remember=True)
         return redirect(url_for('profile'))
@@ -84,9 +89,11 @@ def signup():
         name = form.name.data
         hashed_password = generate_password_hash(form.password.data, method='sha256')
         
-        new_user = User(email, name, hashed_password, None, None)
+        new_user = User(email, name, hashed_password, None, False, None)
         create_user(new_user)
+        send_verification_email(new_user)
 
+        flash('User created! Please check your email to verify your account!')
         return redirect(url_for('auth.login'))
 
     return render_template('signup.html', form=form)
