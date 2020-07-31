@@ -2,7 +2,7 @@ import logging
 
 from flask import (Blueprint, current_app, flash, redirect, render_template,
                    request, url_for)
-from flask_login import login_user, login_required, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from db_operations import create_user, get_user
@@ -14,6 +14,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     log = current_app.logger
+
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
     form = LoginForm(request.form)
     if form.validate_on_submit():
         log.info('valid form')
@@ -34,25 +38,19 @@ def login():
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     log = current_app.logger
-    # TODO implment form
-    form = SignupForm(request.form)
 
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+    
+    form = SignupForm(request.form)
     if form.validate_on_submit():
-        # code to validate and add user to database goes here
-        log.info('valid form')
+        # add user to database
+        log.info('valid signup form')
         email = form.email.data
         name = form.name.data
-        password = form.password.data
-
-        user = get_user(email)
-        if user:
-            log.info('user with email %s found', user.email)
-
-            # if a user is found, redirect to login page
-            flash(f'Email {user.email} already exists')
-            return redirect(url_for('auth.login'))
+        hashed_password = generate_password_hash(form.password.data, method='sha256')
         
-        new_user = User(email, name, generate_password_hash(password, method='sha256'), None, None)
+        new_user = User(email, name, hashed_password, None, None)
         create_user(new_user)
 
         return redirect(url_for('auth.login'))
