@@ -11,6 +11,40 @@ from users import User
 
 auth = Blueprint('auth', __name__)
 
+def send_verification_email(user):
+    if not user.verified:
+        token = user.get_token(86400)
+        msg = Message('PetAdoption: Email Verification', sender='petadoption.sps@gmail.com',
+                    recipients=[account.email])
+        msg.body = f'''Welcome to PetAdoption! Please click this link to verify your account:
+    {url_for('auth.verify_account', token=token, _external=True)}
+    The link above will expire in 24 hours. If you missed this email, please click the link below to request a new valid link:
+    {url_for('auth.request_verification_email', _external=True)}
+    '''
+        mail.send(msg)
+
+@auth.route('/verify-account/<token>', methods = ['GET'])
+def verify_account(token):
+    email = User.verify_token(token)
+    user = get_user(email)
+    if user is None:
+        flash('Your link has expired or is invalid! Request a new valid link!')
+        return redirect(url_for('auth.request_verification_email'))
+    user.verified = True
+    update_user(user.email, user.to_firestore())
+    return redirect(url_for('auth.login'))
+
+@auth.route('/request_verification_email', methods = ['GET', 'POST'])
+def request_verification_email():
+    form = RequestVerificationEmail()
+    if form.validate_on_submit():
+        user = get_user(form.email.data)
+        if user:
+            send_verification_email(user)
+        flash('Link has been sent to your email. It will expire in 24 hours.')
+        return redirect(url_for('auth.login'))
+    return render_template('verify.html', form=form)
+
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     log = current_app.logger
