@@ -4,9 +4,9 @@ from flask import (Blueprint, current_app, flash, redirect, render_template,
                    request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from db_operations import create_user, get_user
-from forms import LoginForm, SignupForm
+from flask_mail import Mail, Message
+from db_operations import create_user, get_user, update_user
+from forms import LoginForm, SignupForm, RequestVerificationEmail
 from users import User
 
 auth = Blueprint('auth', __name__)
@@ -15,7 +15,7 @@ def send_verification_email(user):
     if not user.verified:
         token = user.get_token(86400)
         msg = Message('PetAdoption: Email Verification', sender='petadoption.sps@gmail.com',
-                    recipients=[account.email])
+                    recipients=[user.email])
         msg.body = f'''Welcome to PetAdoption! Please click this link to verify your account:
     {url_for('auth.verify_account', token=token, _external=True)}
     The link above will expire in 24 hours. If you missed this email, please click the link below to request a new valid link:
@@ -36,7 +36,7 @@ def verify_account(token):
 
 @auth.route('/request_verification_email', methods = ['GET', 'POST'])
 def request_verification_email():
-    form = RequestVerificationEmail()
+    form = RequestVerificationEmail(request.form)
     if form.validate_on_submit():
         user = get_user(form.email.data)
         if user:

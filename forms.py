@@ -48,4 +48,4 @@ class SignupForm(FlaskForm):
 
 class RequestVerificationEmail(FlaskForm):
     email = StringField('Email', validators=[Email(), DataRequired()])
-    send = SubmitFiled('Resend Email')
+    send = SubmitField('Resend Email')

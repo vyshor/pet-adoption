@@ -23,7 +23,7 @@ class User(UserMixin):
             "profile": {
                 "hashed_password": self.password,
                 "name": self.name,
-                "contact_number": self.contact_number
+                "contact_number": self.contact_number,
                 "verified": self.verified
             },
             "listings": self.listings
