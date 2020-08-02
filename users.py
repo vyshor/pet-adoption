@@ -1,5 +1,6 @@
 import json
 
+from flask import current_app
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as TimedSerializer
 
@@ -33,16 +34,14 @@ class User(UserMixin):
         return json.dumps(self, default = lambda o: o.__dict__)
 
     def get_token(self, expires_in):
-        timed_serializer = TimedSerializer(app.config['SECRET_KEY'], expires_in)
+        timed_serializer = TimedSerializer(current_app.config['SECRET_KEY'], expires_in)
         return timed_serializer.dumps({'user_email': self.email}).decode('utf-8')
 
     @staticmethod
     def verify_token(token):
-        timed_serializer = TimedSerializer(app.config['SECRET_KEY'])
+        timed_serializer = TimedSerializer(current_app.config['SECRET_KEY'])
         try:
             user_email = timed_serializer.loads(token)['user_email']
         except:
             return None
         return user_email
-
-from main import app
