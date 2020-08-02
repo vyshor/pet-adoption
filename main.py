@@ -19,11 +19,12 @@ import uuid
 
 from flask import (Flask, Response, abort, jsonify, redirect, render_template,
                    request, url_for)
-from flask_mail import Mail, Message
 from flask_login import LoginManager, current_user, login_required
+from flask_mail import Mail, Message
 
 from auth import auth as auth_blueprint
-from db_operations import *
+from db_operations import (create_listing, create_listing_without_id,
+                           delete_user, get_listing, get_listings, get_user)
 from forms import AdoptionForm, CreateListingForm
 from gcloudstorage import upload_blob
 
@@ -74,7 +75,7 @@ def root():
                 app.logger.error(e)
         form_dict = request.form.to_dict()
         try:
-            new_listing = createListingWithoutId(
+            new_listing = create_listing_without_id(
                 form_dict['pet_name'],
                 form_dict['animal'],
                 form_dict['breed'],
@@ -107,17 +108,8 @@ def adopt(listing_id):
 
     return redirect(url_for('root'))
 
-@app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
+@app.route('/users/<email>', methods=['GET', 'DELETE'])
 def handle_user(email):
-    if request.method == 'POST':
-        # TODO populate user details    
-        new_user = User("test@example.com_" + str(uuid.uuid4()), "name", "+6598765432", [])
-        created = create_user(new_user)
-       
-        if not created:
-            app.logger.error("Failed to create user")
-            abort(500, "Failed to create user")
-        return Response("", status=201, mimetype='application/json')
     if request.method == 'GET':
         user = get_user(email)
         if not user:

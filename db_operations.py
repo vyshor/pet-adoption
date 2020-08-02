@@ -48,6 +48,7 @@ def create_user(user: User):
 
 
 def get_user(email):
+    log = current_app.logger
     try:
         user = users_db.document(email).get()
         if user.exists:
@@ -59,14 +60,16 @@ def get_user(email):
 
 
 def update_user(user_email, user_details):
+    log = current_app.logger
     try:
         users_db.document(user_email).update(user_details)
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
 
 
 def delete_user(user_email):
+    log = current_app.logger
     try:
         users_db.document(user_email).delete()
         return True
@@ -87,6 +90,7 @@ def create_listing(listing):
 
 
 def create_empty_listing():
+    log = current_app.logger
     try:
         doc_ref = listings_db.document()
         return doc_ref.id
@@ -94,12 +98,13 @@ def create_empty_listing():
         log.error(e)
         return None
 
-def createListingWithoutId(pet_name, animal, breed, dob, description, img_url, user_email):
+def create_listing_without_id(pet_name, animal, breed, dob, description, img_url, user_email):
     listing_id = create_empty_listing()
     return Listing(pet_name, animal, breed, dob, description, img_url, user_email, listing_id)
 
 
 def get_listing(listing_id):
+    log = current_app.logger
     try:
         listing = listings_db.document(listing_id).get()
 
@@ -120,14 +125,16 @@ def get_listings():
 
 
 def update_listing(listing_id, listing_details):
+    log = current_app.logger
     try:
         listings_db.document(listing_id).update(listing_details)
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
 
 
 def delete_listing(listing_id):
+    log = current_app.logger
     try:
         listings_db.document(listing_id).delete()
         return True

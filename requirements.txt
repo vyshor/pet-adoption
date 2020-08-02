@@ -1,3 +1,4 @@
+pylint
 Flask==1.1.2
 flask-login
 firebase_admin
