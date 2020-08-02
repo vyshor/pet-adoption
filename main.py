@@ -25,7 +25,7 @@ from flask_mail import Mail, Message
 from auth import auth as auth_blueprint
 from db_operations import (create_listing, create_listing_without_id,
                            delete_user, get_listing, get_listings, get_user)
-from forms import AdoptionForm, CreateListingForm
+from forms import AdoptionForm, CreateListingForm, LoginForm, SignupForm
 from gcloudstorage import upload_blob
 
 app = Flask(__name__)
@@ -64,7 +64,9 @@ def root():
         listings = get_listings()
         form = CreateListingForm()
         adoptform = AdoptionForm()
-        return render_template('main.html', listings=listings, form=form, adoptform=adoptform)
+        loginform = LoginForm()
+        signupform = SignupForm()
+        return render_template('main.html', listings=listings, form=form, adoptform=adoptform, loginform=loginform, signupform=signupform)
     elif request.method == 'POST':
         for key, upload in request.files.items():
             identity = str(uuid.uuid4())  # or uuid.uuid4().hex
