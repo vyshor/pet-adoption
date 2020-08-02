@@ -11,14 +11,15 @@ from users import User
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     log = current_app.logger
 
     if current_user.is_authenticated:
         return redirect(url_for('root'))
 
-    form = LoginForm(request.form)
+    form = LoginForm()
+    signupform = SignupForm()
     if form.validate_on_submit():
         log.info('valid form')
         email = form.email.data
@@ -33,7 +34,11 @@ def login():
         log.info('login success')
         login_user(user, remember=True)
         return redirect(url_for('root'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', loginform=form, signupform=signupform)
+
+@auth.route('/test', methods=['GET'])
+def test():
+    return ok
 
 @auth.route('/signup', methods=['POST'])
 def signup():
