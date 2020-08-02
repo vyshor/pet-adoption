@@ -1,6 +1,6 @@
 import logging
 
-from flask import (Blueprint, current_app, flash, redirect, render_template,
+from flask import (Flask, Blueprint, current_app, flash, redirect, render_template,
                    request, url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -12,6 +12,15 @@ from users import User
 auth = Blueprint('auth', __name__)
 
 def send_verification_email(user):
+    auth_app = Flask(__name__)
+    auth_app.config['SECRET_KEY'] = current_app.config['SECRET_KEY']
+    auth_app.config['MAIL_SERVER'] = current_app.config['MAIL_SERVER']
+    auth_app.config['MAIL_PORT'] = current_app.config['MAIL_PORT']
+    auth_app.config['MAIL_USE_TLS'] = current_app.config['MAIL_USE_TLS']
+    auth_app.config['MAIL_USERNAME'] = current_app.config['MAIL_USERNAME']
+    auth_app.config['MAIL_PASSWORD'] = current_app.config['MAIL_PASSWORD']
+    mail = Mail(auth_app)
+    
     if not user.verified:
         token = user.get_token(86400)
         msg = Message('PetAdoption: Email Verification', sender='petadoption.sps@gmail.com',
