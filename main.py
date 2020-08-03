@@ -36,13 +36,13 @@ app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'petadoption.sps@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD") # SET password as environment variable
 
+mail = Mail(app)
+
 app.register_blueprint(auth_blueprint)
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
-
-mail = Mail(app)
 
 def send_email(poster_email, adopter_email, adopter_name, email_message):
     msg = Message('Someone wants to adopt your pet!', sender='petadoption.sps@gmail.com',

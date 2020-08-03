@@ -45,3 +45,7 @@ class SignupForm(FlaskForm):
         user = get_user(email_field.data)
         if user:
             raise ValidationError(f'Email {email_field.data} has already been taken, please use another email')
+
+class RequestVerificationEmail(FlaskForm):
+    email = StringField('Email', validators=[Email(), DataRequired()])
+    send = SubmitField('Resend Email')
