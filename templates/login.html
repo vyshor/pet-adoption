@@ -85,19 +85,19 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     <div class="collapse navbar-toggleable-md text-xs-center text-uppercase tm-navbar" id="tmNavbar">
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="{{ url_for('auth.test') }}">Cats</a>
+                                <a class="nav-link" href="{{ url_for('root') }}" onclick="window.location.replace('{{ url_for('root') }}')">Cats</a>
                             </li>                                
                             <li class="nav-item">
-                                <a class="nav-link" href="#0" data-no="2">Dogs</a>
+                                <a class="nav-link" href="{{ url_for('root') }}" onclick="window.location.replace('{{ url_for('root') }}')">Dogs</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#0" data-no="3">Other pets</a>
+                                <a class="nav-link" href="{{ url_for('root') }}" onclick="window.location.replace('{{ url_for('root') }}')">Other pets</a>
                             </li>
                             <li class="nav-item active selected">
                                 <a class="nav-link" href="#0" data-no="1">Login <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#0" data-no="5">Register</a>
+                                <a class="nav-link" href="{{ url_for('auth.signup') }}" onclick="window.location.replace('{{ url_for('auth.signup') }}')">Sign Up</a>
                             </li>
                         </ul>
                     </div>                        
