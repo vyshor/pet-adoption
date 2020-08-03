@@ -29,18 +29,14 @@ def login():
         if not user or not check_password_hash(user.password, password):
             log.info('login failed')
             flash('Please check your login details and try again.')
-            return redirect(url_for('root'))
+            return redirect(url_for('auth.login'))
         
         log.info('login success')
         login_user(user, remember=True)
         return redirect(url_for('root'))
     return render_template('login.html', loginform=form, signupform=signupform)
 
-@auth.route('/test', methods=['GET'])
-def test():
-    return ok
-
-@auth.route('/signup', methods=['POST'])
+@auth.route('/signup', methods=['GET','POST'])
 def signup():
     log = current_app.logger
 
