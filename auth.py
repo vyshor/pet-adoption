@@ -55,14 +55,15 @@ def request_verification_email():
         return redirect(url_for('root'))
     return render_template('verify.html', form=form)
 
-@auth.route('/login', methods=['POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
     log = current_app.logger
 
     if current_user.is_authenticated:
         return redirect(url_for('root'))
 
-    form = LoginForm(request.form)
+    form = LoginForm()
+    signupform = SignupForm()
     if form.validate_on_submit():
         log.info('valid form')
         email = form.email.data
@@ -72,7 +73,7 @@ def login():
         if not user or not check_password_hash(user.password, password):
             log.info('login failed - wrong login details')
             flash('Please check your login details and try again.')
-            return redirect(url_for('root'))
+            return redirect(url_for('auth.login'))
         
         if not user.verified:
             log.info('login failed - user not verified')
@@ -82,9 +83,9 @@ def login():
         log.info('login success')
         login_user(user, remember=True)
         return redirect(url_for('root'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', loginform=form, signupform=signupform)
 
-@auth.route('/signup', methods=['POST'])
+@auth.route('/signup', methods=['GET','POST'])
 def signup():
     log = current_app.logger
 

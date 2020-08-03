@@ -103,14 +103,14 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                     {% if current_user.is_authenticated %}
                                         <a class="nav-link" href="#0" data-no="4">Have a pet for adoption?</a>
                                     {% else %}
-                                        <a class="nav-link" href="#0" data-no="4">Login</a>
+                                        <a class="nav-link" href="{{ url_for('auth.login') }}" onclick="window.location.replace('{{ url_for('auth.login') }}')">Login</a>
                                     {% endif %}
                                 </li>
                                 <li class="nav-item">
                                     {% if current_user.is_authenticated %}
                                         <a class="nav-link" href="#0" data-no="5">My Profile</a>
                                     {% else %}
-                                        <a class="nav-link" href="#0" data-no="5">Register</a>
+                                        <a class="nav-link" href="{{ url_for('auth.login') }}" onclick="window.location.replace('{{ url_for('auth.signup') }}')">Login</a>
                                     {% endif %}
                                 </li>
                             </ul>
