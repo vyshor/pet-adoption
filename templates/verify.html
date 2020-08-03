@@ -63,6 +63,15 @@ http://www.templatemo.com/tm-500-fluid-gallery
 </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="cd-hero">
         <!-- Navigation -->        
         <div class="cd-slider-nav">
@@ -73,16 +82,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
 
             </nav>
         </div>
-        <ul class="cd-hero-slider"> 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div style="background-color:red;">
-                <p style="font-size:2vh; color:black; padding-left:5px;">
-                {{ messages[0] }}.
-                </p>
-            </div>
-        {% endif %}
-        {% endwith %}
+        <ul class="cd-hero-slider"> git
             <li class="selected">
                 <div class="cd-full-width">
                     <div class="container-fluid js-tm-page-content tm-page-pad" data-page-no="1">

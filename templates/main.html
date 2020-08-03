@@ -63,7 +63,15 @@ http://www.templatemo.com/tm-500-fluid-gallery
 </head>
 
     <body>
-        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
         <!-- Content -->
         <div class="cd-hero">
 
@@ -112,15 +120,6 @@ http://www.templatemo.com/tm-500-fluid-gallery
                 </nav>
             </div> 
             <ul class="cd-hero-slider">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div style="background-color:red;">
-                    <p style="font-size:2vh; color:black; padding-left:5px;">
-                    {{ messages[0] }}.
-                    </p>
-                </div>
-            {% endif %}
-            {% endwith %}
                 <!-- Page 1 : Cats -->
                 <li class="selected">                    
                     <div class="cd-full-width">
