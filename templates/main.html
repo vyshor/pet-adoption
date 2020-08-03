@@ -298,38 +298,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                                         <button type="submit" class="pull-xs-right tm-submit-btn">Submit</button>
                                                     </form>
                                                 {% else %}
-                                                    <h2 class="tm-contact-info">Log In</h2>
-                                                    <form action="/login" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
-                                                        {{ loginform.hidden_tag() }}
-
-                                                        <div class="item">
-                                                                {{ loginform.email.label }}
-                                                                {% if loginform.email.errors %}
-                                                                    {{ loginform.email(placeholder="Your Email") }}
-                                                                    <div>
-                                                                        {% for error in loginform.email.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ loginform.email(placeholder="Your Email") }}
-                                                                {% endif %}
-                                                        </div>
-                                                        <div class="item">
-                                                                {{ loginform.password.label }}
-                                                                {% if loginform.password.errors %}
-                                                                    {{ loginform.password(placeholder="Your Password") }}
-                                                                    <div>
-                                                                        {% for error in loginform.password.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ loginform.password(placeholder="Your Password") }}
-                                                                {% endif %}
-                                                        </div>
-                                                        <button type="submit" class="pull-xs-right tm-submit-btn">Submit</button>
-                                                    </form>
+                                                <!-- Empty to accommodate the lag -->
                                                 {% endif %}
                                             </div>
 
@@ -357,53 +326,9 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                         <div class="tm-flex tm-contact-container">                                
                                             <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
                                                 {% if current_user.is_authenticated %}
-                                                    <p> Profile </p>
+                                                <p> Profile </p>
                                                 {% else %}
-                                                    <h2 class="tm-contact-info">Sign Up</h2>
-                                                    <form action="/signup" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
-                                                        {{ signupform.hidden_tag() }}
-
-                                                        <div class="item">
-                                                                {{ signupform.email.label }}
-                                                                {% if signupform.email.errors %}
-                                                                    {{ signupform.email(placeholder="Your Email") }}
-                                                                    <div>
-                                                                        {% for error in signupform.email.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ signupform.email(placeholder="Your Email") }}
-                                                                {% endif %}
-                                                        </div>
-                                                        <div class="item">
-                                                                {{ signupform.name.label }}
-                                                                {% if signupform.name.errors %}
-                                                                    {{ signupform.name(placeholder="Your Name") }}
-                                                                    <div>
-                                                                        {% for error in signupform.name.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ signupform.name(placeholder="Your Name") }}
-                                                                {% endif %}
-                                                        </div>
-                                                        <div class="item">
-                                                                {{ signupform.password.label }}
-                                                                {% if signupform.password.errors %}
-                                                                    {{ signupform.password(placeholder="Your Password") }}
-                                                                    <div>
-                                                                        {% for error in signupform.password.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ signupform.password(placeholder="Your Password") }}
-                                                                {% endif %}
-                                                        </div>
-                                                        <button type="submit" class="pull-xs-right tm-submit-btn">Submit</button>
-                                                    </form>
+                                                <!-- Empty to accommodate the lag -->
                                                 {% endif %}
                                             </div>
 
