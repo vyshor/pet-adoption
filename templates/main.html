@@ -326,7 +326,9 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                         <div class="tm-flex tm-contact-container">                                
                                             <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
                                                 {% if current_user.is_authenticated %}
-                                                <p> Profile </p>
+                                                <h2 class="tm-contact-info">Profile</h2>
+                                                <p> Welcome, {{ current_user.name }}! </p>
+                                                <button class="pull-xs-right tm-submit-btn" onclick="window.location.replace('{{ url_for('auth.logout') }}')">Logout</button>
                                                 {% else %}
                                                 <!-- Empty to accommodate the lag -->
                                                 {% endif %}

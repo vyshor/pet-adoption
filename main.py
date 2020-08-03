@@ -64,8 +64,6 @@ def root():
         listings = get_listings()
         form = CreateListingForm()
         adoptform = AdoptionForm()
-        loginform = LoginForm()
-        signupform = SignupForm()
         return render_template('main.html', listings=listings, form=form, adoptform=adoptform)
     elif request.method == 'POST':
         for key, upload in request.files.items():
