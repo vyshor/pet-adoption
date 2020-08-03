@@ -23,7 +23,7 @@ def send_verification_email(user):
     
     if not user.verified:
         token = user.get_token(86400)
-        msg = Message('PetAdoption: Email Verification', sender='petadoption.sps@gmail.com',
+        msg = Message('Pet Adoption: Email Verification', sender='petadoption.sps@gmail.com',
                     recipients=[user.email])
         msg.body = f'''Welcome to PetAdoption! Please click this link to verify your account:
     {url_for('auth.verify_account', token=token, _external=True)}
@@ -41,7 +41,8 @@ def verify_account(token):
         return redirect(url_for('auth.request_verification_email'))
     user.verified = True
     update_user(user.email, user.to_firestore())
-    return redirect(url_for('auth.login'))
+    flash('Account verified! You can now log in')
+    return redirect(url_for('root'))
 
 @auth.route('/request_verification_email', methods = ['GET', 'POST'])
 def request_verification_email():
@@ -51,7 +52,7 @@ def request_verification_email():
         if user:
             send_verification_email(user)
         flash('Link has been sent to your email. It will expire in 24 hours.')
-        return redirect(url_for('auth.login'))
+        return redirect(url_for('root'))
     return render_template('verify.html', form=form)
 
 @auth.route('/login', methods=['POST'])
@@ -69,14 +70,14 @@ def login():
 
         user = get_user(email)
         if not user or not check_password_hash(user.password, password):
-            log.info('login failed')
+            log.info('login failed - wrong login details')
             flash('Please check your login details and try again.')
             return redirect(url_for('root'))
         
         if not user.verified:
-            log.info('login failed')
-            flash('Please check your email and verify your account first')
-            return redirect(url_for('auth.login'))
+            log.info('login failed - user not verified')
+            flash('Please check your email and verify your account first!')
+            return redirect(url_for('root'))
 
         log.info('login success')
         login_user(user, remember=True)
