@@ -42,7 +42,7 @@ def verify_account(token):
     user.verified = True
     update_user(user.email, user.to_firestore())
     flash('Account verified! You can now log in')
-    return redirect(url_for('root'))
+    return redirect(url_for('auth.login'))
 
 @auth.route('/request_verification_email', methods = ['GET', 'POST'])
 def request_verification_email():
@@ -52,7 +52,7 @@ def request_verification_email():
         if user:
             send_verification_email(user)
         flash('Link has been sent to your email. It will expire in 24 hours.')
-        return redirect(url_for('root'))
+        return redirect(url_for('auth.login'))
     return render_template('verify.html', form=form)
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -78,12 +78,12 @@ def login():
         if not user.verified:
             log.info('login failed - user not verified')
             flash('Please check your email and verify your account first!')
-            return redirect(url_for('root'))
+            return redirect(url_for('auth.login'))
 
         log.info('login success')
         login_user(user, remember=True)
         return redirect(url_for('root'))
-    return render_template('login.html', loginform=form, signupform=signupform)
+    return render_template('login.html', loginform=form)
 
 @auth.route('/signup', methods=['GET','POST'])
 def signup():
@@ -105,7 +105,7 @@ def signup():
         send_verification_email(new_user)
         
         flash('User created! Please check your email to verify your account!')
-        return redirect(url_for('root'))
+        return redirect(url_for('auth.login'))
 
     return render_template('signup.html', form=form)
 
