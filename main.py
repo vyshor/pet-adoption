@@ -24,7 +24,7 @@ from flask_mail import Mail, Message
 
 from auth import auth as auth_blueprint
 from db_operations import (create_listing, create_listing_without_id,
-                           delete_user, get_listing, get_listings, get_user)
+                           delete_user, get_listing, get_listings, get_user, delete_listing)
 from forms import AdoptionForm, CreateListingForm
 from gcloudstorage import upload_blob
 
@@ -132,6 +132,27 @@ def handle_listings():
             abort(500, "Failed to get listings")
         return jsonify(listings)
 
+      
+@app.route('/listings/delete/<listing_id>', methods=['DELETE'])
+@login_required
+def delete_listing(listing_id):
+    if request.method == 'DELETE':
+        listing_obj = get_listing(listing_id)
+        if listing_obj:
+            if listing_obj.user_email == current_user.email:
+                if delete_listing(listing_id):
+                    return 'Successfully deleted listing', 204
+                else:
+                    app.logger.error(f"Failed to delete listing: {listing_id}")
+                    abort(500, f"Failed to delete listing: {listing_id}")
+            else:
+                app.logger.error(f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
+                abort(500, f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
+        else:
+            app.logger.error(f"Failed to delete listing, listing does not exist: {listing_id}")
+            abort(500, f"Failed to delete listing, listing does not exist: {listing_id}")
+
+            
 @login_manager.user_loader
 def load_user(user_id):
     ''' 

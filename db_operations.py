@@ -88,6 +88,14 @@ def create_listing(listing):
         log.error(e)
         return False
 
+def delete_listing(listing):
+    log = current_app.logger
+    try:
+        listings_db.document(listing).delete()
+        return True
+    except Exception as e:
+        log.error(e)
+        return False
 
 def create_empty_listing():
     log = current_app.logger
