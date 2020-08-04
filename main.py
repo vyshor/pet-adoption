@@ -132,24 +132,24 @@ def handle_listings():
             abort(500, "Failed to get listings")
         return jsonify(listings)
 
-@app.route('/listings/delete/<listing>', methods=['DELETE'])
+@app.route('/listings/delete/<listing_id>', methods=['DELETE'])
 @login_required
-def delete_listing(listing):
+def delete_listing(listing_id):
     if request.method == 'DELETE':
-        listing_obj = get_listing(listing)
+        listing_obj = get_listing(listing_id)
         if listing_obj:
             if listing_obj.user_email == current_user.email:
-                if delete_listing(listing):
+                if delete_listing(listing_id):
                     return 'Successfully deleted listing', 204
                 else:
-                    app.logger.error(f"Failed to delete listing: {listing}")
-                    abort(500, f"Failed to delete listing: {listing}")
+                    app.logger.error(f"Failed to delete listing: {listing_id}")
+                    abort(500, f"Failed to delete listing: {listing_id}")
             else:
                 app.logger.error(f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
                 abort(500, f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
         else:
-            app.logger.error(f"Failed to delete listing, listing does not exist: {listing}")
-            abort(500, f"Failed to delete listing, listing does not exist: {listing}")
+            app.logger.error(f"Failed to delete listing, listing does not exist: {listing_id}")
+            abort(500, f"Failed to delete listing, listing does not exist: {listing_id}")
 
 
 @app.route('/profile')
