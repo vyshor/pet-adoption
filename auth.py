@@ -23,7 +23,7 @@ def send_verification_email(user):
     
     if not user.verified:
         token = user.get_token(86400)
-        msg = Message('PetAdoption: Email Verification', sender='petadoption.sps@gmail.com',
+        msg = Message('Pet Adoption: Email Verification', sender='petadoption.sps@gmail.com',
                     recipients=[user.email])
         msg.body = f'''Welcome to PetAdoption! Please click this link to verify your account:
     {url_for('auth.verify_account', token=token, _external=True)}
@@ -41,6 +41,7 @@ def verify_account(token):
         return redirect(url_for('auth.request_verification_email'))
     user.verified = True
     update_user(user.email, user.to_firestore())
+    flash('Account verified! You can now log in')
     return redirect(url_for('auth.login'))
 
 @auth.route('/request_verification_email', methods = ['GET', 'POST'])
@@ -59,9 +60,10 @@ def login():
     log = current_app.logger
 
     if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+        return redirect(url_for('root'))
 
-    form = LoginForm(request.form)
+    form = LoginForm()
+    signupform = SignupForm()
     if form.validate_on_submit():
         log.info('valid form')
         email = form.email.data
@@ -69,26 +71,26 @@ def login():
 
         user = get_user(email)
         if not user or not check_password_hash(user.password, password):
-            log.info('login failed')
+            log.info('login failed - wrong login details')
             flash('Please check your login details and try again.')
             return redirect(url_for('auth.login'))
         
         if not user.verified:
-            log.info('login failed')
-            flash('Please check your email and verify your account first')
+            log.info('login failed - user not verified')
+            flash('Please check your email and verify your account first!')
             return redirect(url_for('auth.login'))
 
         log.info('login success')
         login_user(user, remember=True)
-        return redirect(url_for('profile'))
-    return render_template('login.html', form=form)
+        return redirect(url_for('root'))
+    return render_template('login.html', loginform=form)
 
-@auth.route('/signup', methods=['GET', 'POST'])
+@auth.route('/signup', methods=['GET','POST'])
 def signup():
     log = current_app.logger
 
     if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+        return redirect(url_for('root'))
     
     form = SignupForm(request.form)
     if form.validate_on_submit():
@@ -101,7 +103,7 @@ def signup():
         new_user = User(email, name, hashed_password, None, False, None)
         create_user(new_user)
         send_verification_email(new_user)
-
+        
         flash('User created! Please check your email to verify your account!')
         return redirect(url_for('auth.login'))
 
