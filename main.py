@@ -132,11 +132,6 @@ def handle_listings():
             abort(500, "Failed to get listings")
         return jsonify(listings)
 
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
-
 @login_manager.user_loader
 def load_user(user_id):
     ''' 
