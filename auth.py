@@ -62,8 +62,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('root'))
 
-    form = LoginForm()
-    signupform = SignupForm()
+    form = LoginForm(request.form)
     if form.validate_on_submit():
         log.info('valid form')
         email = form.email.data

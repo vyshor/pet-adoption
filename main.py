@@ -132,6 +132,7 @@ def handle_listings():
             abort(500, "Failed to get listings")
         return jsonify(listings)
 
+      
 @app.route('/listings/delete/<listing_id>', methods=['DELETE'])
 @login_required
 def delete_listing(listing_id):
@@ -151,12 +152,7 @@ def delete_listing(listing_id):
             app.logger.error(f"Failed to delete listing, listing does not exist: {listing_id}")
             abort(500, f"Failed to delete listing, listing does not exist: {listing_id}")
 
-
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
-
+            
 @login_manager.user_loader
 def load_user(user_id):
     ''' 
