@@ -1,7 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, DateField, TextAreaField
-from wtforms.validators import DataRequired, Email, Length, Optional
-from flask_wtf.file import FileField, FileAllowed, FileRequired
+from flask_wtf.file import FileAllowed, FileField, FileRequired
+from wtforms import (DateField, PasswordField, SelectField, StringField,
+                     SubmitField, TextAreaField)
+from wtforms.validators import (DataRequired, Email, Length, Optional,
+                                ValidationError)
+
+from db_operations import get_user
 
 
 class AdoptionForm(FlaskForm):
@@ -23,3 +27,25 @@ class CreateListingForm(FlaskForm):
         FileAllowed(tuple('jpg jpe jpeg png gif svg bmp webp'.split()), 'Images only!')
     ])
     submit = SubmitField('Submit')
+
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[Email()])
+    password = PasswordField('Password')
+    submit = SubmitField('Submit')
+
+
+class SignupForm(FlaskForm):
+    email = StringField('Email', validators=[Email(), DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def validate_email(form, email_field):
+        user = get_user(email_field.data)
+        if user:
+            raise ValidationError(f'Email {email_field.data} has already been taken, please use another email')
+
+class RequestVerificationEmail(FlaskForm):
+    email = StringField('Email', validators=[Email(), DataRequired()])
+    send = SubmitField('Resend Email')

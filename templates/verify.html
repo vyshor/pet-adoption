@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Pet Adoption</title>
+<!--
+Fluid Gallery Template
+http://www.templatemo.com/tm-500-fluid-gallery
+-->
+    <!-- load stylesheets -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">  
+    <!-- Google web font "Open Sans" -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='Font-Awesome-4.7/css/font-awesome.min.css') }}">                
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">                                      
+    <!-- Bootstrap style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hero-slider-style.css') }}">                              
+    <!-- Hero slider style (https://codyhouse.co/gem/hero-slider/) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">                                 
+    <!-- Magnific popup style (http://dimsemenov.com/plugins/magnific-popup/) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/templatemo-style.css') }}">
+    <!-- Flexbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css" >
+    <!-- Flexbox Helpers -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flexboxgrid-helpers.min.css') }}">
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+          <![endif]-->
+
+        <!-- These two JS are loaded at the top for gray scale including the loader. -->
+
+        <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
+        <!-- jQuery (https://jquery.com/download/) -->
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script>
+        $(function() {
+            $( ".dtpick" ).datepicker();
+        });
+        </script>
+
+        <script>
+		
+            var tm_gray_site = false;
+            
+            if(tm_gray_site) {
+                $('html').addClass('gray');
+            }
+            else {
+                $('html').removeClass('gray');   
+            }
+        </script>
+</head>
+
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="cd-hero">
+        <!-- Navigation -->        
+        <div class="cd-slider-nav">
+            <nav class="navbar">
+                <div class="tm-navbar-bg">     
+                    <a class="navbar-brand text-uppercase" href="{{ url_for('root') }}"><i class="fa fa-paw tm-brand-icon"></i>Pet Adoption</a>              
+                </div>
+
+            </nav>
+        </div>
+        <ul class="cd-hero-slider"> git
+            <li class="selected">
+                <div class="cd-full-width">
+                    <div class="container-fluid js-tm-page-content tm-page-pad" data-page-no="1">
+                        <div class="tm-contact-page"> 
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="tm-flex tm-contact-container">  
+                                        <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
+                                            <h2 class="tm-contact-info">Resend Verification Link</h2>
+                                                    <form action="/login" method="POST" style="box-shadow: none;">
+                                                        {{ form.hidden_tag() }}
+
+                                                        <div class="item">
+                                                                {{ form.email.label }}
+                                                                {% if form.email.errors %}
+                                                                    {{ form.email(placeholder="Your Email") }}
+                                                                    <div>
+                                                                        {% for error in form.email.errors %}
+                                                                            <span>{{ error }}</span>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                {% else %}
+                                                                    {{ form.email(placeholder="Your Email") }}
+                                                                {% endif %}
+                                                        </div>
+                                                        <button type="submit" class="pull-xs-right tm-submit-btn">Send</button>
+                                                    </form>    
+                                        </div>                          
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

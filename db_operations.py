@@ -1,10 +1,12 @@
-import os
 import logging
-from users import User
-from firebase_admin import credentials, firestore, initialize_app
-from listings import Listing
+import os
 
-log = logging.getLogger('db')
+from firebase_admin import credentials, firestore, initialize_app
+from flask import current_app
+
+from listings import Listing
+from users import User
+
 # Initialize Firestore DB
 cred = credentials.Certificate('servicekey.json')
 default_app = initialize_app(cred)
@@ -33,10 +35,12 @@ listings_db = db.collection('listings')
 #   user_email [String]
 
 
-def create_user(user):
+def create_user(user: User):
+    log = current_app.logger
+    log.info('creating new user %s', user.email)
     try:
         res = users_db.document(user.email).set(user.to_firestore())
-        log.info(res.update_time)
+        log.info('created new user %s at %s', user.email, res.update_time)
         return True
     except Exception as e:
         log.error(e)
@@ -44,6 +48,7 @@ def create_user(user):
 
 
 def get_user(email):
+    log = current_app.logger
     try:
         user = users_db.document(email).get()
         if user.exists:
@@ -55,14 +60,16 @@ def get_user(email):
 
 
 def update_user(user_email, user_details):
+    log = current_app.logger
     try:
         users_db.document(user_email).update(user_details)
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
 
 
 def delete_user(user_email):
+    log = current_app.logger
     try:
         users_db.document(user_email).delete()
         return True
@@ -72,6 +79,7 @@ def delete_user(user_email):
 
 
 def create_listing(listing):
+    log = current_app.logger
     try:
         res = listings_db.document(listing.listing_id).set(listing.to_firestore())
         log.info(res.update_time)
@@ -80,8 +88,17 @@ def create_listing(listing):
         log.error(e)
         return False
 
+def delete_listing(listing):
+    log = current_app.logger
+    try:
+        listings_db.document(listing).delete()
+        return True
+    except Exception as e:
+        log.error(e)
+        return False
 
 def create_empty_listing():
+    log = current_app.logger
     try:
         doc_ref = listings_db.document()
         return doc_ref.id
@@ -89,12 +106,13 @@ def create_empty_listing():
         log.error(e)
         return None
 
-def createListingWithoutId(pet_name, animal, breed, dob, description, img_url, user_email):
+def create_listing_without_id(pet_name, animal, breed, dob, description, img_url, user_email):
     listing_id = create_empty_listing()
     return Listing(pet_name, animal, breed, dob, description, img_url, user_email, listing_id)
 
 
 def get_listing(listing_id):
+    log = current_app.logger
     try:
         listing = listings_db.document(listing_id).get()
 
@@ -115,18 +133,19 @@ def get_listings():
 
 
 def update_listing(listing_id, listing_details):
+    log = current_app.logger
     try:
         listings_db.document(listing_id).update(listing_details)
         return True
     except Exception as e:
-        print(f"An Error Occured: {e}")
+        log.error(e)
 
 
 def delete_listing(listing_id):
+    log = current_app.logger
     try:
         listings_db.document(listing_id).delete()
         return True
     except Exception as e:
         log.error(e)
         return False
-

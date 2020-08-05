@@ -1,4 +1,6 @@
+pylint
 Flask==1.1.2
+flask-login
 firebase_admin
 Flask-WTF==0.14.2
 Werkzeug==0.15.6
@@ -9,3 +11,4 @@ google-cloud-storage
 grpcio==1.27.2
 gunicorn
 google-api-core==1.17.0
+itsdangerous==1.1.0

@@ -13,14 +13,20 @@
 # limitations under the License.
 
 # [START gae_python38_render_template]
-import datetime, os, uuid
+import datetime
+import os
+import uuid
 
-from flask import Flask, render_template, redirect, url_for, request, abort, Response, jsonify
+from flask import (Flask, Response, abort, jsonify, redirect, render_template,
+                   request, url_for)
+from flask_login import LoginManager, current_user, login_required
 from flask_mail import Mail, Message
-from db_operations import *
+
+from auth import auth as auth_blueprint
+from db_operations import (create_listing, create_listing_without_id,
+                           delete_user, get_listing, get_listings, get_user, delete_listing)
 from forms import AdoptionForm, CreateListingForm
 from gcloudstorage import upload_blob
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(32)
@@ -31,6 +37,12 @@ app.config['MAIL_USERNAME'] = 'petadoption.sps@gmail.com'
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD") # SET password as environment variable
 
 mail = Mail(app)
+
+app.register_blueprint(auth_blueprint)
+
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
 
 def send_email(poster_email, adopter_email, adopter_name, email_message):
     msg = Message('Someone wants to adopt your pet!', sender='petadoption.sps@gmail.com',
@@ -48,7 +60,6 @@ def send_email(poster_email, adopter_email, adopter_name, email_message):
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    form = CreateListingForm()
     if request.method == 'GET':
         listings = get_listings()
         form = CreateListingForm()
@@ -64,7 +75,7 @@ def root():
                 app.logger.error(e)
         form_dict = request.form.to_dict()
         try:
-            new_listing = createListingWithoutId(
+            new_listing = create_listing_without_id(
                 form_dict['pet_name'],
                 form_dict['animal'],
                 form_dict['breed'],
@@ -81,34 +92,24 @@ def root():
 @app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):
     listing = get_listing(listing_id)
-    # if not listing:
-    #     app.logger.error(f"Failed to get listing: {listing_id}")
-    #     abort(404, description=f"Failed to get listing: {listing_id}")
-    if listing:
-        adopter_name = request.form["name"]
-        adopter_email = request.form["email"]
-        email_message = request.form["message"]
+    if not listing:
+        app.logger.error(f"Failed to get listing: {listing_id}")
+        abort(404, description=f"Failed to get listing: {listing_id}")
+        return
+    
+    adopter_name = request.form["name"]
+    adopter_email = request.form["email"]
+    email_message = request.form["message"]
 
-        poster_email = listing.user_email
+    poster_email = listing.user_email
 
-        send_email(poster_email, adopter_email, adopter_name, email_message)
-        app.logger.info("Sent email to {poster_email} with message from {adopter_email}")
+    send_email(poster_email, adopter_email, adopter_name, email_message)
+    app.logger.info(f"Sent email to {poster_email} with message from {adopter_email}")
 
     return redirect(url_for('root'))
 
-
-
-@app.route('/users/<email>', methods=['GET', 'POST', 'DELETE'])
+@app.route('/users/<email>', methods=['GET', 'DELETE'])
 def handle_user(email):
-    if request.method == 'POST':
-        # TODO populate user details    
-        new_user = User("test@example.com_" + str(uuid.uuid4()), "name", "+6598765432", [])
-        created = create_user(new_user)
-       
-        if not created:
-            app.logger.error("Failed to create user")
-            abort(500, "Failed to create user")
-        return Response("", status=201, mimetype='application/json')
     if request.method == 'GET':
         user = get_user(email)
         if not user:
@@ -130,6 +131,38 @@ def handle_listings():
             app.logger.error("Failed to get listings")
             abort(500, "Failed to get listings")
         return jsonify(listings)
+
+      
+@app.route('/listings/delete/<listing_id>', methods=['DELETE'])
+@login_required
+def delete_listing(listing_id):
+    if request.method == 'DELETE':
+        listing_obj = get_listing(listing_id)
+        if listing_obj:
+            if listing_obj.user_email == current_user.email:
+                if delete_listing(listing_id):
+                    return 'Successfully deleted listing', 204
+                else:
+                    app.logger.error(f"Failed to delete listing: {listing_id}")
+                    abort(500, f"Failed to delete listing: {listing_id}")
+            else:
+                app.logger.error(f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
+                abort(500, f"Failed to delete listing, listing not owned by current user: {listing} | {current_user.email}")
+        else:
+            app.logger.error(f"Failed to delete listing, listing does not exist: {listing_id}")
+            abort(500, f"Failed to delete listing, listing does not exist: {listing_id}")
+
+            
+@login_manager.user_loader
+def load_user(user_id):
+    ''' 
+    Take unicode id of user and return corresponding user object
+    See https://flask-login.readthedocs.io/en/latest/#how-it-works
+
+    We use email as the user_id
+    '''
+    return get_user(user_id)
+
 
 if __name__ == '__main__':
     # This is used when running locally only. When deploying to Google App
