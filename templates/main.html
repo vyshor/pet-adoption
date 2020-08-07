@@ -333,7 +333,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <!-- Gallery Two pop up connected with JS code below -->
 
                                     {% for listing in listings %}
-                                        {% if listing.animal != 'cat' and listing.animal != 'dog' %}
+                                        {% if listing.user_email == current_user.email %}
                                             <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
