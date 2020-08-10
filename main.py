@@ -18,7 +18,7 @@ import os
 import uuid
 
 from flask import (Flask, Response, abort, jsonify, redirect, render_template,
-                   request, url_for)
+                   request, url_for, flash)
 from flask_login import LoginManager, current_user, login_required
 from flask_mail import Mail, Message
 
@@ -119,6 +119,7 @@ def editlisting(listing_id):
                 new_listing = request.form.to_dict()
                 del new_listing['csrf_token']
                 if update_listing(listing_id, new_listing):
+                    print("Success")
                     return 'Successfully updated listing', 204
                 else:
                     app.logger.error(f"Failed to edit listing: {listing_id}")

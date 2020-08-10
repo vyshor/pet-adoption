@@ -41,6 +41,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
         <!-- jQuery (https://jquery.com/download/) -->
 
         <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script>
@@ -472,13 +473,22 @@ http://www.templatemo.com/tm-500-fluid-gallery
 {#                    </div>#}
                     <div class="divider"></div>
                     <div>
-                        <a onclick="(() => {$('#{{ listing.listing_id }}_editlistingform').toggle(750)})()" class="btn btn-editinfo"><i class="fa fa-paw" aria-hidden="true"></i>  Edit Info</a>
+                        <a onclick="(() => {$('#{{ listing.listing_id }}_editlistingformdiv').toggle(750)})()" class="btn btn-editinfo"><i class="fa fa-paw" aria-hidden="true"></i>  Edit Info</a>
                         <a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-delete"><i class="fa fa-trash" aria-hidden="true"></i>  Delete</a>
+                    </div>
+                    <div class='message' id="{{ listing.listing_id }}_successmsg">
+                          <div class='check' id="{{ listing.listing_id }}_successcheck">
+                            &#10004;
+                          </div>
+                          <p>Success</p>
+                          <p>
+                            The pet's information has been updated. You need to refresh the page to see the updated information.
+                          </p>
                     </div>
 
                     </div>
-                        <div class="col-xs" style="display: none;" id="{{ listing.listing_id }}_editlistingform">
-                        <form action="/editlisting/{{ listing.listing_id }}" method="POST" style="box-shadow: none;" style="text-align: left;">
+                        <div class="col-xs" style="display: none;" id="{{ listing.listing_id }}_editlistingformdiv">
+                        <form action="/editlisting/{{ listing.listing_id }}" method="POST" id="editlisting_{{ listing.listing_id }}" style="box-shadow: none;" style="text-align: left;">
                         {{ editlistingform.hidden_tag() }}
                         <h2 class="tm-contact-info">Change details of your pet</h2>
                             <div class="item" style="text-align:left;">
@@ -554,6 +564,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <button type="submit" class="pull-xs-right tm-submit-btn">Save</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
                 {%  endif %}
@@ -662,6 +673,16 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     }
                 }
 
+                function showsuccessmsg(nr, listing_id) {
+                    $('#' + listing_id + '_editlistingformdiv').toggle();
+                  $('#' + listing_id + '_successmsg').toggleClass('comein');
+                  $('#' + listing_id + '_successcheck').toggleClass('scaledown');
+                  setTimeout( function(){
+                      $('#' + listing_id + '_successmsg').toggleClass('comein');
+                      $('#' + listing_id + '_successcheck').toggleClass('scaledown');
+                  }  , nr );
+                }
+
 
                 for (const [idx, dog_listing_el] of Object.entries(dog_listing)) {
                     $('#' + dog_listing_el.listing_id).magnificPopup({
@@ -702,6 +723,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     });
                 }
 
+                // User own listings
                 for (const [idx, user_listing_el] of Object.entries(user_listing)) {
                     $('#userowned_' + user_listing_el.listing_id).magnificPopup({
                         items: user_listing.map(mapUserOwnedListingItems),
@@ -712,6 +734,27 @@ http://www.templatemo.com/tm-500-fluid-gallery
                             enabled:true,
                             preload: [4,4]
                         }
+                    });
+
+                    // this is the id of the form
+                    $('#editlisting_' + user_listing_el.listing_id).submit(function(e) {
+
+                        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+                        var form = $(this);
+                        var url = form.attr('action');
+
+                        $.ajax({
+                               type: "POST",
+                               url: url,
+                               data: form.serialize(), // serializes the form's elements.
+                               success: function(data)
+                               {
+                                   showsuccessmsg(3000, user_listing_el.listing_id);
+                               }
+                             });
+
+
                     });
                 }
 
