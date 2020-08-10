@@ -315,12 +315,12 @@ http://www.templatemo.com/tm-500-fluid-gallery
                 <li>
                     <div class="cd-full-width">
                         <div class="container-fluid js-tm-page-content tm-page-pad" data-page-no="5">
-                            <div class="tm-about-page">                                
+                            <div class="tm-about-page">
+                                {% if current_user.is_authenticated %}
                                 <div class="row tm-white-box-margin-b">
                                     <div class="col-xs-12">
                                         <div class="tm-flex">                                
                                             <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding">
-                                                {% if current_user.is_authenticated %}
                                                 <h2 class="tm-text-title">My Profile</h2>
                                                 <p class="tm-text">Welcome, {{ current_user.name }}! Click on your pet to edit its information!</p>
                                                 <button class="pull-xs-right tm-submit-btn" onclick="window.location.replace('{{ url_for('auth.logout') }}')">Logout</button>
@@ -328,34 +328,28 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tm-img-gallery-container">
-                                <div class="tm-img-gallery gallery-three">
-                                <!-- Gallery Two pop up connected with JS code below -->
+                                    <div class="tm-img-gallery-container">
+                                        <div class="tm-img-gallery gallery-four">
+                                        <!-- Gallery Two pop up connected with JS code below -->
+                                            {% for listing in listings %}
 
-                                    {% for listing in listings %}
-                                        {% if listing.user_email == current_user.email %}
-                                            <div class="grid-item" id="{{ listing.listing_id }}">
-                                                <figure class="effect-sadie">
-                                                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
-                                                    <figcaption>
-                                                        <h2 class="tm-figure-title">{{ listing.pet_name }}</h2>
-                                                        <p class="tm-figure-description">{{  listing.breed }}</p>
-                                                        <a href="{{ listing.img_url }}">View more</a>
-                                                    </figcaption>
-                                                </figure>
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-
-                            </div> <!-- .tm-img-gallery-container -->
-                                                {% else %}
-                                                <!-- Empty to accommodate the lag -->
-                                            </div>
-                                        </div>
+                                                {% if (listing.user_email == current_user.email) %}
+                                                    <div class="grid-item" id="userowned_{{ listing.listing_id }}">
+                                                        <figure class="effect-sadie">
+                                                            <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
+                                                            <figcaption>
+                                                                <h2 class="tm-figure-title">{{ listing.pet_name }}</h2>
+                                                                <p class="tm-figure-description">{{  listing.breed }}</p>
+                                                                <a href="{{ listing.img_url }}">View more</a>
+                                                            </figcaption>
+                                                        </figure>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div> <!-- .tm-img-gallery-container -->
                                     </div>
-                                </div>
-                                                {% endif %}     
-                            </div>    
+                            {% endif %}
+                            </div>
                         </div>
                     </div> <!-- .cd-full-width -->
                 </li>
@@ -449,6 +443,98 @@ http://www.templatemo.com/tm-500-fluid-gallery
             </div>
             {% endfor %}
 
+            {% for listing in listings %}
+                {%  if listing.user_email == current_user.email %}
+                <div class="white-popup center mfp-hide row" id="userowned_{{ listing.listing_id }}_modal">
+                <div class="card col-xs">
+                    <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img2">
+                    <div class="name"><p>{{ listing.pet_name }}</p></div>
+                    <div class="numbers" style="max-width: 40vw">
+                        <table class="stats">
+                            <tbody>
+                            <tr>
+                                <td>Breed</td>
+                                <td>{{ listing.breed }}</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday</td>
+                                <td>{{ listing.dob }}</td>
+                            </tr>
+                            {% if listing.description_of_pet %}
+                            <tr>
+                                <td>Description</td>
+                                <td>{{ listing.description_of_pet }}</td>
+                            </tr>
+                            {%  endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+{#                    <div style="max-width: 200px;">#}
+{#                        <h2 class="tm-contact-info">More about me...</h2>#}
+{#                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci, amet consectetur dolor ducimus excepturi explicabo in, iusto laudantium, mollitia natus nesciunt nisi odit optio quidem sapiente tempore totam voluptas.</p>#}
+{#                    </div>#}
+                    <div class="divider"></div>
+                    <div>
+                        <a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-editinfo"><i class="fa fa-paw" aria-hidden="true"></i>  Edit Info</a>
+                        <a onclick="(() => {$('#{{ listing.listing_id }}_form').toggle(750)})()" class="btn btn-delete"><i class="fa fa-trash" aria-hidden="true"></i>  Delete</a>
+                    </div>
+
+                    </div>
+                        <div class="col-xs" style="display: none;" id="{{ listing.listing_id }}_form">
+                        <form action="/adopt/{{ listing.listing_id }}" method="POST" style="box-shadow: none;" style="text-align: left;">
+                        {{ adoptform.hidden_tag() }}
+                        <h2 class="tm-contact-info">Send a message to its current caregiver...</h2>
+                            <div class="item" style="text-align:left;">
+                            <h2 class="tm-contact-info">Your Name</h2>
+                                {% if adoptform.name.errors %}
+                                    {{ adoptform.name(placeholder="Name") }}
+                                    <div>
+                                        {% for error in adoptform.name.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ adoptform.name(placeholder="Name") }}
+                                {% endif %}
+                            </div>
+                            <div class="item"  style="text-align:left;">
+                            <h2 class="tm-contact-info">Your Email</h2>
+                                {% if adoptform.email.errors %}
+                                    {{ adoptform.email(placeholder="Email") }}
+                                    <div>
+                                        {% for error in adoptform.email.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ adoptform.email(placeholder="Email") }}
+                                {% endif %}
+                            </div>
+                            <div class="item"  style="text-align:left;">
+                            <h2 class="tm-contact-info">Message to the caregiver</h2>
+                                <div>
+                                {% if adoptform.message.errors %}
+                                    {{ adoptform.message(placeholder="Write a message...", style="width: 100%;") }}
+                                    <div>
+                                        {% for error in adoptform.message.errors %}
+                                            <span>{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    {{ adoptform.message(placeholder="Write a message...", style="width: 100%;") }}
+                                {% endif %}
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="pull-xs-right tm-submit-btn">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {%  endif %}
+            {% endfor %}
+
 
 
 
@@ -523,9 +609,11 @@ http://www.templatemo.com/tm-500-fluid-gallery
                 adjustHeightOfPage(1); // Adjust page height
 
                 let listings_data = {{ listings|safe }};
+                let user_email = `{% if current_user %}{{ current_user.email|safe }}{% endif %}`;
                 var dog_listing = [];
                 var cat_listing = [];
                 var other_listing = [];
+                var user_listing = [];
                 for (listing_data of listings_data) {
                     switch (listing_data["animal"]) {
                         case "dog":
@@ -537,12 +625,21 @@ http://www.templatemo.com/tm-500-fluid-gallery
                         default:
                             other_listing.push(listing_data);
                     }
+                    if (listing_data["user_email"] == user_email)
+                        user_listing.push(listing_data);
                 }
 
 
                 function mapListingItems(listing) {
                     return {
                         src: `#${listing.listing_id}_modal`,
+                        type: 'inline'
+                    }
+                }
+
+                function mapUserOwnedListingItems(listing) {
+                    return {
+                        src: `#userowned_${listing.listing_id}_modal`,
                         type: 'inline'
                     }
                 }
@@ -578,6 +675,19 @@ http://www.templatemo.com/tm-500-fluid-gallery
                     $('#' + other_listing_el.listing_id).magnificPopup({
                         items: other_listing.map(mapListingItems),
                         key: 'others',
+                        index: parseInt(idx, 10),
+                        type: 'image',
+                        gallery:{
+                            enabled:true,
+                            preload: [4,4]
+                        }
+                    });
+                }
+
+                for (const [idx, user_listing_el] of Object.entries(user_listing)) {
+                    $('#userowned_' + user_listing_el.listing_id).magnificPopup({
+                        items: user_listing.map(mapUserOwnedListingItems),
+                        key: 'users',
                         index: parseInt(idx, 10),
                         type: 'image',
                         gallery:{
