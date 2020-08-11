@@ -217,6 +217,19 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                                     <form action="/createadopt" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
                                                         {{ form.hidden_tag() }}
                                                     <div class="item">
+                                                            {{ form.email.label }}
+                                                            {% if form.email.errors %}
+                                                                {{ form.email(placeholder="Your Email", value=current_user.email) }}
+                                                                <div>
+                                                                    {% for error in form.email.errors %}
+                                                                        <span>{{ error }}</span>
+                                                                    {% endfor %}
+                                                                </div>
+                                                            {% else %}
+                                                                {{ form.email(placeholder="Your Email", value=current_user.email) }}
+                                                            {% endif %}
+                                                    </div>
+                                                    <div class="item">
                                                                 Pet's Name
                                                                 {% if form.pet_name.errors %}
                                                                     {{ form.pet_name(placeholder="Pet's Name") }}

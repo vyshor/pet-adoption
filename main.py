@@ -70,7 +70,6 @@ def root():
 
 
 @app.route('/createadopt', methods=['POST'])
-@login_required
 def create_adopt():
     if request.method == 'POST':
         for key, upload in request.files.items():
@@ -89,7 +88,7 @@ def create_adopt():
                 form_dict['dob'],
                 form_dict['description_of_pet'],
                 img_url,
-                current_user.email,
+                form_dict['email'],
             )
             create_listing(new_listing)
             return redirect(url_for('root'))

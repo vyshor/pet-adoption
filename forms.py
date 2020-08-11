@@ -16,6 +16,7 @@ class AdoptionForm(FlaskForm):
 
 
 class CreateListingForm(FlaskForm):
+    email = StringField(validators=[DataRequired(), Email()])
     pet_name = StringField(validators=[DataRequired()])
     animal = SelectField("dog", choices=[("dog", "dog"), ("cat", "cat"), ("others", "other animals")])
     breed = StringField(validators=[DataRequired()])
