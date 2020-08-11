@@ -80,8 +80,10 @@ def login():
             return redirect(url_for('auth.login'))
 
         log.info('login success')
-        login_user(user, remember=False)
-        return redirect(url_for('root'))
+        login_user(user, remember=True)
+        if current_user.is_authenticated:
+            return redirect(url_for('root'))
+
     return render_template('login.html', loginform=form)
 
 @auth.route('/signup', methods=['GET','POST'])
