@@ -220,14 +220,14 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                                         <div class="item">
                                                                 {{ form.email.label }}
                                                                 {% if form.email.errors %}
-                                                                    {{ form.email(placeholder="Your Email") }}
+                                                                    {{ form.email(placeholder="Your Email", value=current_user.email, disabled="true") }}
                                                                     <div>
                                                                         {% for error in form.email.errors %}
                                                                             <span>{{ error }}</span>
                                                                         {% endfor %}
                                                                     </div>
                                                                 {% else %}
-                                                                    {{ form.email(placeholder="Your Email") }}
+                                                                    {{ form.email(placeholder="Your Email", value=current_user.email, disabled="true") }}
                                                                 {% endif %}
                                                         </div>
                                                     <div class="item">
