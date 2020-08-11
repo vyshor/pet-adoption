@@ -216,20 +216,6 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                                     <h2 class="tm-contact-info">Have a pet for adoption?</h2>
                                                     <form action="/" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
                                                         {{ form.hidden_tag() }}
-
-                                                        <div class="item">
-                                                                {{ form.email.label }}
-                                                                {% if form.email.errors %}
-                                                                    {{ form.email(placeholder="Your Email", value=current_user.email, disabled="true") }}
-                                                                    <div>
-                                                                        {% for error in form.email.errors %}
-                                                                            <span>{{ error }}</span>
-                                                                        {% endfor %}
-                                                                    </div>
-                                                                {% else %}
-                                                                    {{ form.email(placeholder="Your Email", value=current_user.email, disabled="true") }}
-                                                                {% endif %}
-                                                        </div>
                                                     <div class="item">
                                                                 Pet's Name
                                                                 {% if form.pet_name.errors %}

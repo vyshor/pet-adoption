@@ -84,7 +84,7 @@ def root():
                 form_dict['dob'],
                 form_dict['description_of_pet'],
                 img_url,
-                form_dict['email'],
+                current_user.email,
             )
             create_listing(new_listing)
         except Exception as e:
