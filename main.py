@@ -59,7 +59,7 @@ def send_email(poster_email, adopter_email, adopter_name, email_message):
 
     mail.send(msg)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def root():
     if request.method == 'GET':
         listings = get_listings()
@@ -67,7 +67,12 @@ def root():
         adoptform = AdoptionForm()
         editlistingform = EditListingForm()
         return render_template('main.html', listings=listings, form=form, adoptform=adoptform, editlistingform=editlistingform)
-    elif request.method == 'POST':
+
+
+@app.route('/createadopt', methods=['POST'])
+@login_required
+def create_adopt():
+    if request.method == 'POST':
         for key, upload in request.files.items():
             identity = str(uuid.uuid4())  # or uuid.uuid4().hex
             try:
@@ -87,9 +92,10 @@ def root():
                 current_user.email,
             )
             create_listing(new_listing)
+            return redirect(url_for('root'))
         except Exception as e:
             app.logger.error(e)
-        return redirect(url_for('root'))
+            abort(500, f"Failed to create listing")
 
 @app.route('/adopt/<listing_id>', methods=['POST'])
 def adopt(listing_id):

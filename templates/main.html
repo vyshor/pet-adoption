@@ -214,7 +214,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                             <div class="tm-bg-white-translucent text-xs-left tm-textbox tm-2-col-textbox-2 tm-textbox-padding tm-textbox-padding-contact">
                                                 {% if current_user.is_authenticated %}
                                                     <h2 class="tm-contact-info">Have a pet for adoption?</h2>
-                                                    <form action="/" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
+                                                    <form action="/createadopt" method="POST" enctype="multipart/form-data" style="box-shadow: none;">
                                                         {{ form.hidden_tag() }}
                                                     <div class="item">
                                                                 Pet's Name
