@@ -127,7 +127,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <!-- Gallery One pop up connected with JS code below -->
 
                                     {% for listing in listings %}
-                                        {% if listing.animal == 'cat' %}
+                                        {% if listing.animal == 'cat' and listing.user_email != current_user.email %}
                                             <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
@@ -156,7 +156,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <!-- Gallery Two pop up connected with JS code below -->
                                     
                                     {% for listing in listings %}
-                                        {% if listing.animal == 'dog' %}
+                                        {% if listing.animal == 'dog' and listing.user_email != current_user.email %}
                                             <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
@@ -185,7 +185,7 @@ http://www.templatemo.com/tm-500-fluid-gallery
                                 <!-- Gallery Three pop up connected with JS code below -->
 
                                     {% for listing in listings %}
-                                        {% if listing.animal != 'cat' and listing.animal != 'dog' %}
+                                        {% if listing.animal != 'cat' and listing.animal != 'dog' and listing.user_email != current_user.email %}
                                             <div class="grid-item" id="{{ listing.listing_id }}">
                                                 <figure class="effect-sadie">
                                                     <img src="{{ listing.img_url }}" alt="Image" class="img-fluid tm-img">
@@ -664,18 +664,20 @@ http://www.templatemo.com/tm-500-fluid-gallery
                 var other_listing = [];
                 var user_listing = [];
                 for (listing_data of listings_data) {
-                    switch (listing_data["animal"]) {
-                        case "dog":
-                            dog_listing.push(listing_data);
-                            break;
-                        case "cat":
-                            cat_listing.push(listing_data);
-                            break;
-                        default:
-                            other_listing.push(listing_data);
-                    }
-                    if (listing_data["user_email"] == user_email)
+                    if (listing_data["user_email"] === user_email) {
                         user_listing.push(listing_data);
+                    } else {
+                        switch (listing_data["animal"]) {
+                            case "dog":
+                                dog_listing.push(listing_data);
+                                break;
+                            case "cat":
+                                cat_listing.push(listing_data);
+                                break;
+                            default:
+                                other_listing.push(listing_data);
+                        }
+                    }
                 }
 
 
