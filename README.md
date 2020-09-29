@@ -3,7 +3,7 @@
 > Web application built for [Google Software Product Sprint (SPS)](https://buildyourfuture.withgoogle.com/programs/softwareproductsprint/), Summer 2020  <br>
 > We built this website to provide a centralised platform for users to adopt pets, and show the pets that are up for adoption.
 
-###### [Click here for the Website](http://summer20-sps-42.appspot.com/)
+###### [Click here for the Website](https://petadoption-sps.herokuapp.com/)
 
 ###### [Click here for our Presentation](https://docs.google.com/presentation/d/1ypY5AXfkRWxMDJs04YtG8owsqjFshq4BGDfUrbMD1Ls/edit?usp=sharing)
 
